@@ -1,0 +1,27 @@
+name: "Build frontend"
+run-name: "Run ${{github.run_id}}, triggered by ${{github.actor}}"
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  frontend:
+    name: "Build frontend component"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      # setup
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: frontend/package.json
+          cache: pnpm
+      # install deps and run build
+      - name: install deps
+        run: pnpm install
+      - name: build
+        run: pnpm run build
