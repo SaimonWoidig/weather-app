@@ -27,13 +27,28 @@ jobs:
       - name: setup Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
+          github-token: "${{secrets.GITHUB_TOKEN}}"
+          generate-job-summary: true
           add-job-summary-as-pr-comment: on-failure
           cache-disabled: true
       - name: ensure gradle wrapper is executable
         run: chmod +x gradlew
-      # build, run tests and upload artifacts
+      # build, run tests and generate codecov
       - name: build and run tests
         run: ./gradlew build
+      - name: add code coverage to PR
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: backend/build/reports/jacoco/test/jacocoTestReport.xml
+          token: "${{secrets.GITHUB_TOKEN}}"
+          title: Code coverage report
+          update-comment: true
+          fail-emoji: ":x:"
+          pass-emoji: ":heavy_check_mark:"
+          continue-on-error: true
+          min-coverage-overall: 80
+          min-coverage-changed-files: 80
+      # upload artifacts
       - name: upload artifacts
         uses: actions/upload-artifact@v4
         with:
