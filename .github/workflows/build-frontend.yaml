@@ -11,6 +11,9 @@ jobs:
     defaults:
       run:
         working-directory: frontend
+    env:
+      # STORE_PATH is set in "get pnpm store directory"
+      STORE_PATH:
     steps:
       # setup
       - name: checkout
@@ -19,7 +22,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: frontend/package.json
-          cache: pnpm
+      - name: setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          package_json_file: frontend/package.json
+          run_install: false
+      - name: get pnpm store directory
+        shell: bash
+        run: 'echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV'
+      - uses: actions/cache@v3
+        name: setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
       # install deps and run build
       - name: install deps
         run: pnpm install
