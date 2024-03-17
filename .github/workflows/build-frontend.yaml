@@ -47,3 +47,4 @@ jobs:
         with:
           name: Package
           path: frontend/dist
+          retention-days: 1

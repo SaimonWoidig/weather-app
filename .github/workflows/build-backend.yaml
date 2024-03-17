@@ -74,3 +74,4 @@ jobs:
         with:
           name: Package
           path: backend/build/libs
+          retention-days: 1
