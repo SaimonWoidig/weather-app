@@ -23,6 +23,7 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: gradle
+          cache-dependency-path: backend/build.gradle.kts
       - name: setup Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
