@@ -47,12 +47,12 @@ jobs:
         run: pnpm run build
       - name: test and coverage
         run: pnpm run test
-      - name: add coverage to PR and as a check
-        uses: 5monkeys/cobertura-action@v13
+      - name: upload code coverage to codecov
+        uses: codecov/codecov-action@v4
         with:
-          minimum_coverage: 80
-          repo_token: "${{secrets.GITHUB_TOKEN}}"
-          path: "frontend/coverage/cobertura-coverage.xml"
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: frontend
+          file: frontend/coverage/cobertura-coverage.xml
       # upload artifacts
       - name: upload artifacts
         uses: actions/upload-artifact@v4

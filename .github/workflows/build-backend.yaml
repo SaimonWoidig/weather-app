@@ -37,41 +37,9 @@ jobs:
       # build, run tests and generate codecov
       - name: build and run tests
         run: ./gradlew build
-      - name: add code coverage to PR
-        id: jacoco
-        uses: madrapps/jacoco-report@v1.6.1
+      - name: upload code coverage to codecov
+        uses: codecov/codecov-action@v4
         with:
-          paths: backend/build/reports/jacoco/test/jacocoTestReport.xml
-          token: "${{secrets.GITHUB_TOKEN}}"
-          title: Code coverage report
-          update-comment: true
-          fail-emoji: ":x:"
-          pass-emoji: ":heavy_check_mark:"
-          continue-on-error: true
-          min-coverage-overall: 80
-          min-coverage-changed-files: 80
-      - name: add code coverage report to checks
-        id: jacoco_reporter
-        uses: PavanMudigonda/jacoco-reporter@v5.0
-        with:
-          coverage_results_path: backend/build/reports/jacoco/test/jacocoTestReport.xml
-          github_token: "${{secrets.GITHUB_TOKEN}}"
-          minimum_coverage: 80
-          coverage_report_name: Coverage
-          coverage_report_title: JaCoCo
-          fail_below_threshold: false
-      - name: Get the Coverage info
-        run: |
-          echo "Total coverage coverage-overall ${{steps.jacoco.outputs.coverage-overall}}"
-          echo "Changed Files coverage ${{steps.jacoco.outputs.coverage-changed-files}}"
-          echo "Coverage coveragePercentage ${{steps.jacoco_reporter.outputs.coveragePercentage}}"
-          echo "Coverage coveragePercentageString ${{steps.jacoco_reporter.outputs.coveragePercentageString}}"
-      - name: Add Coverage Job Summary
-        run: echo "${{steps.jacoco_reporter.outputs.coverageSummary}}" >> $GITHUB_STEP_SUMMARY
-      # upload artifacts
-      - name: upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: Package
-          path: backend/build/libs
-          retention-days: 1
+          token: "${{secrets.CODECOV_TOKEN}}"
+          flags: backend
+          file: backend/build/reports/jacoco/test/jacocoTestReport.xml
