@@ -1,0 +1,62 @@
+name: "Build frontend"
+run-name: "Run ${{github.run_id}}, triggered by ${{github.actor}}"
+on:
+  pull_request:
+    branches:
+      - main
+permissions:
+  pull-requests: write
+  checks: write
+jobs:
+  frontend:
+    name: "Build frontend component"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    env:
+      # STORE_PATH is set in "get pnpm store directory"
+      STORE_PATH:
+    steps:
+      # setup
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: frontend/package.json
+      - name: setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          package_json_file: frontend/package.json
+          run_install: false
+      - name: get pnpm store directory
+        shell: bash
+        run: 'echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV'
+      - uses: actions/cache@v4
+        name: setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      # install deps, run build and tests with code coverage
+      - name: install deps
+        run: pnpm install
+      - name: build
+        run: pnpm run build
+      - name: test and coverage
+        run: pnpm run test
+      - name: upload code coverage to codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: frontend
+          file: frontend/coverage/cobertura-coverage.xml
+      # upload artifacts
+      - name: upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Package
+          path: frontend/dist
+          retention-days: 1

@@ -3,9 +3,10 @@
   "compilerOptions": {
     "types": [
       "astro/client",
-      "vite/client"
+      "vite/client",
+      "vitest/globals"
     ],
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
       "@components/*": [
         "src/components/*"

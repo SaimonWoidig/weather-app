@@ -1,0 +1,1 @@
+FROM docker.io/library/eclipse-temurin:17-alpine

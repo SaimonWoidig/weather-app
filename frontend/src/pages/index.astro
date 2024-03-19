@@ -1,5 +1,7 @@
 ---
+import {sample} from "../services/weather-api/sample-service";
 const apiUrl: string = import.meta.env.API_URL
+const sampleVal = sample(2)
 ---
 
 <html lang="en">
@@ -12,5 +14,6 @@ const apiUrl: string = import.meta.env.API_URL
 <body>
 <h1>Astro</h1>
 <p>{apiUrl}</p>
+<p>num from sample svc is {sampleVal}</p>
 </body>
 </html>
