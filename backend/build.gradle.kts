@@ -30,6 +30,11 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
+
+    implementation("commons-validator:commons-validator:1.8.0") {
+        exclude(module = "commons-logging")
+    }
+    implementation("com.open-meteo:sdk:1.10.0")
 }
 
 tasks.withType<Test> {
