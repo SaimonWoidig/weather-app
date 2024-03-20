@@ -1,6 +1,6 @@
 package cz.woidig.backend.exceptions;
 
-public class GeoException extends Exception {
+public class GeoException extends RuntimeException {
     public GeoException(String msg) {
         super(msg);
     }

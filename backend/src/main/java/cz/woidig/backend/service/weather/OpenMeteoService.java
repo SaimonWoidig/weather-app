@@ -1,10 +1,12 @@
 package cz.woidig.backend.service.weather;
 
-import com.openmeteo.sdk.*;
 import cz.woidig.backend.dto.weather.WeatherDTO;
+import cz.woidig.backend.dto.weather.openmeteo.OpenMeteoCurrent;
+import cz.woidig.backend.dto.weather.openmeteo.OpenMeteoDTO;
 import cz.woidig.backend.exceptions.WeatherApiException;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -13,8 +15,6 @@ import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 @Service
 @AllArgsConstructor
@@ -28,18 +28,20 @@ public class OpenMeteoService implements WeatherService {
     private static final String VAR_PRECIPITATION = "precipitation";
     private static final String VAR_WEATHER = "weather_code";
 
+    private final RestTemplateBuilder restTemplateBuilder;
+
     public WeatherDTO getCurrentWeather(float latitude, float longitude) throws WeatherApiException {
         // Call OpenMeteo API
         UriBuilder uriBuilder = UriComponentsBuilder.newInstance();
+        RestTemplate restTemplate = restTemplateBuilder.build();
         URI uri = uriBuilder.scheme(API_PROTO).host(API_HOST).path(API_PATH)
                 .queryParam("latitude", latitude)
                 .queryParam("longitude", longitude)
                 .queryParam("current", String.join(",", VAR_TEMPERATURE, VAR_PRECIPITATION, VAR_WEATHER))
-                .queryParam("format", "flatbuffers")
                 .build();
-        ResponseEntity<byte[]> response;
+        ResponseEntity<OpenMeteoDTO> response;
         try {
-            response = new RestTemplate().getForEntity(uri, byte[].class);
+            response = restTemplate.getForEntity(uri, OpenMeteoDTO.class);
         } catch (RestClientException e) {
             throw new WeatherApiException("OpenMeteo API call failed", e);
         }
@@ -50,19 +52,22 @@ public class OpenMeteoService implements WeatherService {
             throw new WeatherApiException("OpenMeteo API call failed because response body is null");
         }
 
-        // Get response from flatbuffer
-        ByteBuffer byteBuffer = ByteBuffer.wrap(response.getBody()).order(ByteOrder.LITTLE_ENDIAN);
-        WeatherApiResponse weatherApiResponse = WeatherApiResponse.getRootAsWeatherApiResponse(byteBuffer.position(4));
-        VariablesWithTime current = weatherApiResponse.current();
-
-        // Extract variables from response
-        VariableWithValues temperature = new VariablesSearch(current).variable(Variable.temperature).first();
-        VariableWithValues precipitation = new VariablesSearch(current).variable(Variable.precipitation).first();
-        VariableWithValues weatherCode = new VariablesSearch(current).variable(Variable.weather_code).first();
-        if (temperature == null || precipitation == null || weatherCode == null) {
-            throw new WeatherApiException("OpenMeteo API call failed because temperature, precipitation or weatherCode is null");
+        OpenMeteoCurrent data = response.getBody().current();
+        if (data == null) {
+            throw new WeatherApiException("OpenMeteo API call failed because current data is null");
         }
-        return new WeatherDTO(temperature.value(), precipitation.value(), (int) weatherCode.value());
+        
+        if (data.temperature() == null) {
+            throw new WeatherApiException("OpenMeteo API call failed because temperature is null");
+        }
+        if (data.precipitation() == null) {
+            throw new WeatherApiException("OpenMeteo API call failed because precipitation is null");
+        }
+        if (data.weatherCode() == null) {
+            throw new WeatherApiException("OpenMeteo API call failed because weather code is null");
+        }
+
+        return new WeatherDTO(data.temperature(), data.precipitation(), data.weatherCode());
     }
 
 }

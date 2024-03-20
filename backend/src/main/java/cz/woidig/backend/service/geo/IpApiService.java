@@ -5,6 +5,7 @@ import cz.woidig.backend.dto.geo.IpApiDTO;
 import cz.woidig.backend.exceptions.GeoException;
 import lombok.AllArgsConstructor;
 import org.apache.commons.validator.routines.InetAddressValidator;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -21,6 +22,7 @@ public class IpApiService implements GeoService {
     private static final String API_HOST = "ip-api.com";
     private static final String API_PATH = "/json/";
 
+    private final RestTemplateBuilder restTemplateBuilder;
     private final InetAddressValidator inetAddressValidator;
 
     @Override
@@ -32,7 +34,7 @@ public class IpApiService implements GeoService {
 
         // call IpApi API
         UriBuilder uriBuilder = UriComponentsBuilder.newInstance();
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = restTemplateBuilder.build();
         URI uri = uriBuilder.scheme(API_PROTO).host(API_HOST).path(API_PATH).path(ip)
                 .queryParam("fields", "status,message,lat,lon")
                 .build();
