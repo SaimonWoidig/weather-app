@@ -33,6 +33,7 @@ dependencies {
 
     implementation("commons-validator:commons-validator:1.8.0") {
         exclude(module = "commons-logging")
+        exclude(module = "commons-collections")
     }
     implementation("com.open-meteo:sdk:1.10.0")
 }
