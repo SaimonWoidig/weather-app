@@ -3,7 +3,7 @@ package cz.woidig.backend.service.weather;
 import cz.woidig.backend.dto.weather.WeatherDTO;
 import cz.woidig.backend.dto.weather.openmeteo.OpenMeteoCurrent;
 import cz.woidig.backend.dto.weather.openmeteo.OpenMeteoDTO;
-import cz.woidig.backend.exceptions.WeatherApiException;
+import cz.woidig.backend.exceptions.WeatherException;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -30,7 +30,7 @@ public class OpenMeteoService implements WeatherService {
 
     private final RestTemplateBuilder restTemplateBuilder;
 
-    public WeatherDTO getCurrentWeather(float latitude, float longitude) throws WeatherApiException {
+    public WeatherDTO getCurrentWeather(float latitude, float longitude) throws WeatherException {
         // Call OpenMeteo API
         UriBuilder uriBuilder = UriComponentsBuilder.newInstance();
         RestTemplate restTemplate = restTemplateBuilder.build();
@@ -43,28 +43,28 @@ public class OpenMeteoService implements WeatherService {
         try {
             response = restTemplate.getForEntity(uri, OpenMeteoDTO.class);
         } catch (RestClientException e) {
-            throw new WeatherApiException("OpenMeteo API call failed", e);
+            throw new WeatherException("OpenMeteo API call failed", e);
         }
         if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new WeatherApiException("OpenMeteo API call failed with status code " + response.getStatusCode());
+            throw new WeatherException("OpenMeteo API call failed with status code " + response.getStatusCode());
         }
         if (response.getBody() == null) {
-            throw new WeatherApiException("OpenMeteo API call failed because response body is null");
+            throw new WeatherException("OpenMeteo API call failed because response body is null");
         }
 
         OpenMeteoCurrent data = response.getBody().current();
         if (data == null) {
-            throw new WeatherApiException("OpenMeteo API call failed because current data is null");
+            throw new WeatherException("OpenMeteo API call failed because current data is null");
         }
-        
+
         if (data.temperature() == null) {
-            throw new WeatherApiException("OpenMeteo API call failed because temperature is null");
+            throw new WeatherException("OpenMeteo API call failed because temperature is null");
         }
         if (data.precipitation() == null) {
-            throw new WeatherApiException("OpenMeteo API call failed because precipitation is null");
+            throw new WeatherException("OpenMeteo API call failed because precipitation is null");
         }
         if (data.weatherCode() == null) {
-            throw new WeatherApiException("OpenMeteo API call failed because weather code is null");
+            throw new WeatherException("OpenMeteo API call failed because weather code is null");
         }
 
         return new WeatherDTO(data.temperature(), data.precipitation(), data.weatherCode());
