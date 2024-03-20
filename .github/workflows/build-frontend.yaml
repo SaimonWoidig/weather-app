@@ -1,6 +1,9 @@
 name: "Build frontend"
 run-name: "Run ${{github.run_id}}, triggered by ${{github.actor}}"
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
       - main
@@ -36,10 +39,10 @@ jobs:
       - uses: actions/cache@v4
         name: setup pnpm cache
         with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: ${{env.STORE_PATH}}
+          key: ${{runner.os}}-pnpm-store-${{hashFiles('**/pnpm-lock.yaml')}}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+            ${{runner.os}}-pnpm-store-
       # install deps, run build and tests with code coverage
       - name: install deps
         run: pnpm install
@@ -50,7 +53,7 @@ jobs:
       - name: upload code coverage to codecov
         uses: codecov/codecov-action@v4
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{secrets.CODECOV_TOKEN}}
           flags: frontend
           file: frontend/coverage/cobertura-coverage.xml
       # upload artifacts
