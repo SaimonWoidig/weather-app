@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -36,7 +37,12 @@ public class OpenMeteoService implements WeatherService {
                 .queryParam("current", String.join(",", VAR_TEMPERATURE, VAR_PRECIPITATION, VAR_WEATHER))
                 .queryParam("format", "flatbuffers")
                 .build();
-        ResponseEntity<byte[]> response = new RestTemplate().getForEntity(uri, byte[].class);
+        ResponseEntity<byte[]> response;
+        try {
+            response = new RestTemplate().getForEntity(uri, byte[].class);
+        } catch (RestClientException e) {
+            throw new WeatherApiException("OpenMeteo API call failed", e);
+        }
         if (!response.getStatusCode().is2xxSuccessful()) {
             throw new WeatherApiException("OpenMeteo API call failed with status code " + response.getStatusCode());
         }

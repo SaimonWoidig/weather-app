@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.apache.commons.validator.routines.InetAddressValidator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -35,7 +36,13 @@ public class IpApiService implements GeoService {
         URI uri = uriBuilder.scheme(API_PROTO).host(API_HOST).path(API_PATH).path(ip)
                 .queryParam("fields", "status,message,lat,lon")
                 .build();
-        ResponseEntity<IpApiDTO> response = restTemplate.getForEntity(uri, IpApiDTO.class);
+
+        ResponseEntity<IpApiDTO> response;
+        try {
+            response = restTemplate.getForEntity(uri, IpApiDTO.class);
+        } catch (RestClientException e) {
+            throw new GeoException("IpApi API call failed", e);
+        }
         if (!response.getStatusCode().is2xxSuccessful()) {
             throw new GeoException("IpApi API call failed with status code " + response.getStatusCode());
         }
