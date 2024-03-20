@@ -48,7 +48,7 @@ class OpenMeteoServiceTest {
         Mockito.doReturn(mockRestTemplate)
                 .when(mockRestTemplateBuilder).build();
 
-        WeatherDTO expected = new WeatherDTO(1.0f, 0.0f, 1);
+        WeatherDTO expected = new WeatherDTO(temperature, precipitation, weatherCode);
 
         WeatherDTO actual = openMeteoService.getCurrentWeather(latitude, longitude);
 
