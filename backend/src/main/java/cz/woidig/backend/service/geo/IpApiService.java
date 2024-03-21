@@ -46,7 +46,7 @@ public class IpApiService implements GeoService {
             throw new GeoException("IpApi API call failed", e);
         }
         if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new GeoException("IpApi API call failed with status code " + response.getStatusCode());
+            throw new GeoException("IpApi API call failed with status code " + response.getStatusCode().value());
         }
         if (response.getBody() == null) {
             throw new GeoException("IpApi API call failed because response body is null");
