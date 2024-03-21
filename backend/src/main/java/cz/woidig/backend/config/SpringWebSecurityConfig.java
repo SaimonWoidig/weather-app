@@ -13,6 +13,8 @@ public class SpringWebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/actuator/**").permitAll()
+                .requestMatchers("/weather/current").permitAll()
+                .requestMatchers("/geo").permitAll()
                 .anyRequest().authenticated()
         );
         return http.build();
