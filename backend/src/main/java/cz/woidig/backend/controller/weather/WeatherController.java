@@ -16,7 +16,7 @@ public class WeatherController {
     WeatherService weatherService;
 
     @GetMapping("/current")
-    public WeatherDTO getWeather(@RequestParam float latitude, @RequestParam float longitude) throws WeatherException {
+    public WeatherDTO getCurrentWeather(@RequestParam float latitude, @RequestParam float longitude) throws WeatherException {
         return weatherService.getCurrentWeather(latitude, longitude);
     }
 }

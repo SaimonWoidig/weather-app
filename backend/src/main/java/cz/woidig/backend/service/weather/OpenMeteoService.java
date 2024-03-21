@@ -31,6 +31,14 @@ public class OpenMeteoService implements WeatherService {
     private final RestTemplateBuilder restTemplateBuilder;
 
     public WeatherDTO getCurrentWeather(float latitude, float longitude) throws WeatherException {
+        // Validate input
+        if (latitude < -90.0f || latitude > 90.0f) {
+            throw new IllegalArgumentException("Latitude must be between -90.0 and 90.0");
+        }
+        if (longitude < -180.0f || longitude > 180.0f) {
+            throw new IllegalArgumentException("Longitude must be between -180.0 and 180.0");
+        }
+        
         // Call OpenMeteo API
         UriBuilder uriBuilder = UriComponentsBuilder.newInstance();
         RestTemplate restTemplate = restTemplateBuilder.build();
@@ -46,7 +54,7 @@ public class OpenMeteoService implements WeatherService {
             throw new WeatherException("OpenMeteo API call failed", e);
         }
         if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new WeatherException("OpenMeteo API call failed with status code " + response.getStatusCode());
+            throw new WeatherException("OpenMeteo API call failed with status code " + response.getStatusCode().value());
         }
         if (response.getBody() == null) {
             throw new WeatherException("OpenMeteo API call failed because response body is null");

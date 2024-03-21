@@ -22,12 +22,18 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorDTO handleMissingServletRequestParameter(MissingServletRequestParameterException e, WebRequest request) {
+        return new ErrorDTO(HttpStatus.BAD_REQUEST.value(), "Missing request parameter: " + e.getParameterName());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDTO handleIllegalArgumentException(IllegalArgumentException e, WebRequest request) {
         return new ErrorDTO(HttpStatus.BAD_REQUEST.value(), e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorDTO handleException(Exception e, WebRequest request) {
+    public ErrorDTO handleUnhandledException(Exception e, WebRequest request) {
         log.error("unhandled exception", e);
         return new ErrorDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error");
     }
