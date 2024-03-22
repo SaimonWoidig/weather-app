@@ -1,0 +1,19 @@
+---
+import {Weather} from "../enums/Weather";
+import {weatherIcon} from "../services/WeatherIconService";
+
+import {Image} from 'astro:assets';
+
+interface Props {
+    temperature: number;
+    precipitation: number;
+    weather: Weather;
+}
+const {temperature, precipitation, weather} = Astro.props;
+const icon = weatherIcon(weather)
+---
+<div class="weather-card">
+    <Image src={icon} alt="weather-icon"/>
+    <p>Temperature: {temperature} °C</p>
+    <p>Precipitation: {precipitation} mm</p>
+</div>

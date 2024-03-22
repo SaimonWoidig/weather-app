@@ -1,0 +1,11 @@
+<svg width="56" height="48" viewBox="0 0 56 48" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="border-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="white" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="white" stop-opacity="0"/>
+        </linearGradient>
+    </defs>
+    <text x="50%" y="50%" text-anchor="middle" alignment-baseline="middle" font-size="48" font-family="sans-serif"
+          stroke="url(#border-gradient)" stroke-width="2">?
+    </text>
+</svg>
