@@ -9,3 +9,9 @@ spring:
       add-mappings: false
   banner:
     location: classpath:banner.txt
+backend:
+  geo:
+    fallback:
+      # GPS of the Prague castle
+      latitude: 50.0911
+      longitude: 14.3990416
