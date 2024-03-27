@@ -1,4 +1,3 @@
-import type {ImageMetadata} from "astro";
 import {Weather} from "../enums/Weather.ts";
 
 // All images are taken from https://github.com/Makin-Things/weather-icons
@@ -17,53 +16,52 @@ import snowGrains from "../images/icons/weather/snow-grains.svg";
 import thunderstorm from "../images/icons/weather/thunderstorm.svg";
 import unknownWeather from "../images/icons/weather/unknown-weather.svg";
 
-
-export function weatherIcon(weather: Weather): ImageMetadata {
+export function getIconSource(weather: Weather): string {
     switch (weather) {
         case Weather.CLEAR_SKY:
-            return clearSky;
+            return clearSky.src;
         case Weather.MAINLY_CLEAR:
-            return mainlyClear;
+            return mainlyClear.src;
         case Weather.PARTLY_CLOUDY:
-            return partlyCloudy;
+            return partlyCloudy.src;
         case Weather.OVERCAST:
-            return overcast;
+            return overcast.src;
         case Weather.FOG:
         case Weather.DEPOSITING_RIME_FOG:
-            return fog;
+            return fog.src;
         case Weather.LIGHT_DRIZZLE:
         case Weather.MODERATE_DRIZZLE:
         case Weather.DENSE_DRIZZLE:
-            return drizzle;
+            return drizzle.src;
         case Weather.SLIGHT_RAIN:
         case Weather.MODERATE_RAIN:
         case Weather.HEAVY_RAIN:
-            return rain;
+            return rain.src;
         case Weather.SLIGHT_RAIN_SHOWERS:
         case Weather.MODERATE_RAIN_SHOWERS:
         case Weather.VIOLENT_RAIN_SHOWERS:
-            return rainShowers;
+            return rainShowers.src;
         case Weather.LIGHT_FREEZING_DRIZZLE:
         case Weather.DENSE_FREEZING_DRIZZLE:
         case Weather.LIGHT_FREEZING_RAIN:
         case Weather.HEAVY_FREEZING_RAIN:
-            return freezingDrizzleRain;
+            return freezingDrizzleRain.src;
         case Weather.SLIGHT_SNOW:
-            return slightSnow;
+            return slightSnow.src;
         case Weather.MODERATE_SNOW:
         case Weather.HEAVY_SNOW:
-            return moderateHeavySnow;
+            return moderateHeavySnow.src;
         case Weather.SNOW_GRAINS:
-            return snowGrains;
+            return snowGrains.src;
         case Weather.SLIGHT_SNOW_SHOWERS:
         case Weather.HEAVY_SNOW_SHOWERS:
-            return snowGrains;
+            return snowGrains.src;
         case Weather.THUNDERSTORM:
         case Weather.SLIGHT_HAIL_THUNDERSTORM:
         case Weather.HEAVY_HAIL_THUNDERSTORM:
-            return thunderstorm;
+            return thunderstorm.src;
         case Weather.UNKNOWN:
         default:
-            return unknownWeather;
+            return unknownWeather.src;
     }
 }

@@ -6,7 +6,7 @@
       "vite/client",
       "vitest/globals"
     ],
-    "baseUrl": "./",
+    "baseUrl": "D:/Skola/STIN/weather-app/frontend",
     "paths": {
       "@components/*": [
         "src/components/*"
@@ -14,7 +14,9 @@
       "@layouts/*": [
         "src/layouts/*"
       ]
-    }
+    },
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js"
   },
   "exclude": [
     "dist"

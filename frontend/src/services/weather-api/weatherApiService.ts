@@ -9,7 +9,7 @@ interface CurrentWeatherApiResponse {
     weatherCode: number;
 }
 
-export interface CurrentWeather {
+interface CurrentWeather {
     temperature: number;
     precipitation: number;
     weather: Weather;

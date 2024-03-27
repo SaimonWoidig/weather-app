@@ -1,51 +1,8 @@
 ---
-import WeatherCard from "../components/WeatherCard.astro";
-import {CurrentWeather, getCurrentWeather} from "../services/weather-api/weatherApiService";
-import {Geo, getGeoIP} from "../services/geo-api/geoApiService";
-
-const ip = Astro.clientAddress;
-
-let geo: Geo;
-try {
-    geo = await getGeoIP(ip);
-} catch (e) {
-    console.error(e)
-}
-
-let currentWeather: CurrentWeather;
-async function currentWeatherAtGeo(lat, lon: number) {
-    try {
-        currentWeather = await getCurrentWeather(lat, lon)
-    } catch (e) {
-        console.error(e)
-    }
-    return currentWeather;
-}
-
-currentWeather = await currentWeatherAtGeo(geo.latitude, geo.longitude);
+import BaseLayout from "../layouts/BaseLayout.astro";
+import WeatherContainer from "../components/WeatherContainer/WeatherContainer";
 ---
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width"/>
-    <meta name="generator" content={Astro.generator}/>
-    <title>Astro</title>
-</head>
-<body>
-<h1>Weather App</h1>
-<form onsubmit="">
-    <label for="input-latitude">
-        Latitude:
-    </label>
-    <input id="input-latitude" placeholder="0.0" value={geo.latitude}/>
-    <label for="input-longitude">
-        Longitude:
-    </label>
-    <input id="input-longitude" placeholder="0.0" value={geo.longitude}/>
-    <button>Submit</button>
-</form>
-<WeatherCard temperature={currentWeather.temperature} precipitation={currentWeather.precipitation}
-             weather={currentWeather.weather}/>
-</body>
-</html>
+<BaseLayout title="Home">
+    <WeatherContainer client:load/>
+</BaseLayout>

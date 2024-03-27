@@ -1,0 +1,35 @@
+---
+interface Props {
+    title: string
+}
+
+const {title} = Astro.props
+---
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title title={title}/>
+</head>
+<body>
+<div id="nav-container">
+    <h1>{title}</h1>
+    <nav>
+        <a href="#">Home</a>
+    </nav>
+</div>
+<slot/>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    #nav-container {
+        display: flex;
+        column-gap: 10px;
+        align-items: center;
+        border-bottom: black solid;
+    }
+</style>
+</body>
+</html>
