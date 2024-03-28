@@ -1,31 +1,28 @@
 import "./WeatherForm.css"
 
-import {createForm, custom, FormError, required, type SubmitHandler} from "@modular-forms/solid";
-import type {WeatherData} from "../../types/WeatherData.ts";
+import {type Component} from "solid-js";
 import type {SetStoreFunction} from "solid-js/store";
-import type {Component} from "solid-js";
+import {createForm, custom, FormError, required, type SubmitHandler} from "@modular-forms/solid";
 
-type Coordinates = {
-    latitude: number
-    longitude: number
-}
+import type {TWeather} from "@lib/types/weather.ts";
+import type {TGeo} from "@lib/types/geo.ts";
 
 type WeatherFormProps = {
-    defaultLocation: Coordinates
-    setWeatherData: SetStoreFunction<WeatherData>
+    defaultLocation: TGeo
+    setWeatherData: SetStoreFunction<TWeather>
 }
 
 const WeatherForm: Component<WeatherFormProps> = (formProps) => {
-    const [weatherForm, {Form, Field}] = createForm<Coordinates>();
-    const handleSubmit: SubmitHandler<Coordinates> = async (values) => {
+    const [weatherForm, {Form, Field}] = createForm<TGeo>();
+    const handleSubmit: SubmitHandler<TGeo> = async (values) => {
         const res = await fetch(
             `/api/weather?latitude=${values.latitude}&longitude=${values.longitude}&type=current`,
             {method: "GET"}
         );
         if (!res.ok) {
-            throw new FormError<Coordinates>(res.statusText);
+            throw new FormError<TGeo>(res.statusText);
         }
-        const data: WeatherData = await res.json();
+        const data: TWeather = await res.json();
         formProps.setWeatherData(data);
     };
     return (

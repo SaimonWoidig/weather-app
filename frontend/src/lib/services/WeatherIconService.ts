@@ -1,20 +1,20 @@
 import {Weather} from "../enums/Weather.ts";
 
 // All images are taken from https://github.com/Makin-Things/weather-icons
-import clearSky from "../images/icons/weather/clear-sky.svg";
-import mainlyClear from "../images/icons/weather/mainly-clear.svg";
-import partlyCloudy from "../images/icons/weather/partly-cloudy.svg";
-import overcast from "../images/icons/weather/overcast.svg";
-import fog from "../images/icons/weather/fog.svg";
-import drizzle from "../images/icons/weather/drizzle.svg";
-import rain from "../images/icons/weather/rain.svg";
-import rainShowers from "../images/icons/weather/rain-showers.svg";
-import freezingDrizzleRain from "../images/icons/weather/freezing-drizzle-rain.svg";
-import slightSnow from "../images/icons/weather/slight-snow.svg";
-import moderateHeavySnow from "../images/icons/weather/moderate-heavy-snow.svg";
-import snowGrains from "../images/icons/weather/snow-grains.svg";
-import thunderstorm from "../images/icons/weather/thunderstorm.svg";
-import unknownWeather from "../images/icons/weather/unknown-weather.svg";
+import clearSky from "../../images/icons/weather/clear-sky.svg";
+import mainlyClear from "../../images/icons/weather/mainly-clear.svg";
+import partlyCloudy from "../../images/icons/weather/partly-cloudy.svg";
+import overcast from "../../images/icons/weather/overcast.svg";
+import fog from "../../images/icons/weather/fog.svg";
+import drizzle from "../../images/icons/weather/drizzle.svg";
+import rain from "../../images/icons/weather/rain.svg";
+import rainShowers from "../../images/icons/weather/rain-showers.svg";
+import freezingDrizzleRain from "../../images/icons/weather/freezing-drizzle-rain.svg";
+import slightSnow from "../../images/icons/weather/slight-snow.svg";
+import moderateHeavySnow from "../../images/icons/weather/moderate-heavy-snow.svg";
+import snowGrains from "../../images/icons/weather/snow-grains.svg";
+import thunderstorm from "../../images/icons/weather/thunderstorm.svg";
+import unknownWeather from "../../images/icons/weather/unknown-weather.svg";
 
 export function getIconSource(weather: Weather): string {
     switch (weather) {

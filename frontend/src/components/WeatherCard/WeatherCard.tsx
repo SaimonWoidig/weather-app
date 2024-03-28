@@ -1,9 +1,10 @@
 import "./WeatherCard.css"
 
-import {Weather} from "../../enums/Weather.ts";
-import {getIconSource} from "../../services/WeatherIconService.ts";
 import type {Component} from "solid-js";
 import {WiFlood, WiThermometer} from "solid-icons/wi";
+
+import {Weather} from "@lib/enums/Weather.ts";
+import {getIconSource} from "@lib/services/WeatherIconService.ts";
 
 type WeatherCardProps = {
     temperature: number,

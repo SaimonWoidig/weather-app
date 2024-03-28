@@ -1,5 +1,5 @@
 import type {APIRoute} from "astro";
-import {getCurrentWeather} from "../../services/weather-api/weatherApiService.ts";
+import {getCurrentWeather} from "@lib/services/weather-api/weatherApiService.ts";
 
 const WeatherTypes = ["current", "forecast", "past"];
 
@@ -21,6 +21,7 @@ export const GET: APIRoute = async ({url}) => {
         const data = await getCurrentWeather(Number(latitude), Number(longitude));
         return new Response(JSON.stringify(data));
     } catch (e) {
+        console.error("got error from backend: ", e);
         return new Response(JSON.stringify({message: "internal server error"}), {status: 500});
     }
 }
