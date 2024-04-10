@@ -1,19 +1,8 @@
 ---
-import {sample} from "../services/weather-api/sample-service";
-const apiUrl: string = import.meta.env.API_URL
-const sampleVal = sample(2)
+import BaseLayout from "@layouts/BaseLayout.astro";
+import WeatherContainer from "@components/WeatherContainer/WeatherContainer";
 ---
 
-<html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width"/>
-    <meta name="generator" content={Astro.generator}/>
-    <title>Astro</title>
-</head>
-<body>
-<h1>Astro</h1>
-<p>{apiUrl}</p>
-<p>num from sample svc is {sampleVal}</p>
-</body>
-</html>
+<BaseLayout title="Home">
+    <WeatherContainer client:load/>
+</BaseLayout>

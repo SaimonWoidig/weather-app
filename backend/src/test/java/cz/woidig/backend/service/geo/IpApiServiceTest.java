@@ -59,7 +59,7 @@ class IpApiServiceTest {
     void test_getGeoByIp_invalid_ip() {
         String ip = "not_a_valid_ip";
 
-        assertThrows(GeoException.class, () -> ipApiService.getGeoByIp(ip));
+        assertThrows(IllegalArgumentException.class, () -> ipApiService.getGeoByIp(ip));
     }
 
     @Test

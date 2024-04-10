@@ -17,7 +17,7 @@ import java.net.URI;
 
 @Service
 @AllArgsConstructor
-public class IpApiService implements GeoService {
+public class IpApiService extends ConfigFallbackGeoService implements GeoService {
     private static final String API_PROTO = "http";
     private static final String API_HOST = "ip-api.com";
     private static final String API_PATH = "/json/";
@@ -28,8 +28,8 @@ public class IpApiService implements GeoService {
     @Override
     public GeoDTO getGeoByIp(String ip) throws GeoException {
         // validate IP address
-        if (!inetAddressValidator.isValidInet4Address(ip)) {
-            throw new GeoException("Invalid IP address");
+        if (!inetAddressValidator.isValid(ip)) {
+            throw new IllegalArgumentException("Invalid IP address " + ip);
         }
 
         // call IpApi API
@@ -52,11 +52,25 @@ public class IpApiService implements GeoService {
             throw new GeoException("IpApi API call failed because response body is null");
         }
 
-        // get response and check status
+        // get response and validate
         IpApiDTO ipApiDTO = response.getBody();
-        if (!ipApiDTO.status().equals("success")) {
-            throw new GeoException(ipApiDTO.message());
-        }
+        validateIpApiDTO(ipApiDTO);
+
         return new GeoDTO(ipApiDTO.latitude(), ipApiDTO.longitude());
+    }
+
+    private static void validateIpApiDTO(IpApiDTO dto) throws IllegalArgumentException,GeoException {
+        if (!dto.status().equals("success")) {
+            if (dto.message() == null) {
+                throw new GeoException("IpApi API call unsuccessful without message");
+            }
+            if (dto.message().equals("private range")) {
+                throw new IllegalArgumentException("IP address in private range");
+            }
+            if (dto.message().equals("reserved range")) {
+                throw new IllegalArgumentException("IP address in reserved range");
+            }
+            throw new GeoException(dto.message());
+        }
     }
 }

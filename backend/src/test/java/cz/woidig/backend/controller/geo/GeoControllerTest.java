@@ -30,13 +30,13 @@ class GeoControllerTest {
         Mockito.doReturn(new GeoDTO(0.0f, 0.0f))
                 .when(geoService).getGeoByIp(Mockito.anyString());
 
-        assertDoesNotThrow(() -> geoController.getGeo("1.1.1.1"));
+        assertDoesNotThrow(() -> geoController.getGeoByIP("1.1.1.1"));
     }
 
     @Test
     void test_getGeo_throws() {
         Mockito.doThrow(new GeoException("Error"))
                 .when(geoService).getGeoByIp(Mockito.anyString());
-        assertThrows(GeoException.class, () -> geoController.getGeo("1.1.1.1"));
+        assertThrows(GeoException.class, () -> geoController.getGeoByIP("1.1.1.1"));
     }
 }

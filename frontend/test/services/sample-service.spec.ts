@@ -1,5 +1,5 @@
 import {expect, test} from 'vitest';
-import {sample} from "../../src/services/weather-api/sample-service.ts";
+import {sample} from "../../src/lib/services/weather-api/sample-service.ts";
 
 test("sample service test", () => {
     const input = 2

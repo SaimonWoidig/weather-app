@@ -1,0 +1,20 @@
+.weather-card {
+    max-width: 200px;
+    display: flex;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.icon-container {
+    padding: 1rem;
+}
+
+.separator {
+    border-left: 1px solid black;
+    height: 100px;
+}
+
+.weather-info {
+    padding: 1rem;
+}

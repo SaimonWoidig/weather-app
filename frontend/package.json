@@ -15,7 +15,12 @@
   "dependencies": {
     "@astrojs/check": "^0.5.9",
     "@astrojs/node": "^8.2.3",
+    "@astrojs/solid-js": "^4.0.1",
+    "@modular-forms/solid": "^0.20.0",
     "astro": "^4.5.5",
+    "astro-icon": "^1.1.0",
+    "solid-icons": "^1.1.0",
+    "solid-js": "^1.8.16",
     "typescript": "^5.4.2"
   },
   "devDependencies": {

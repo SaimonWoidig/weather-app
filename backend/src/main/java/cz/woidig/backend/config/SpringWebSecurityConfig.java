@@ -14,7 +14,7 @@ public class SpringWebSecurityConfig {
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers("/weather/current").permitAll()
-                .requestMatchers("/geo").permitAll()
+                .requestMatchers("/geo/**").permitAll()
                 .anyRequest().authenticated()
         );
         return http.build();
