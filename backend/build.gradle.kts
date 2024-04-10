@@ -39,6 +39,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
+    implementation("org.bouncycastle:bcprov-jdk18on:1.78")
 
     implementation("org.xerial:sqlite-jdbc:3.45.2.0")
 
