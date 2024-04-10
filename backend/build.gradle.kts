@@ -3,6 +3,7 @@ plugins {
     id("org.springframework.boot") version "3.2.3"
     id("io.spring.dependency-management") version "1.1.4"
     jacoco
+    idea
 }
 
 group = "cz.woidig"
@@ -22,14 +23,26 @@ repositories {
     mavenCentral()
 }
 
+idea {
+    module {
+        isDownloadJavadoc = true
+    }
+}
+
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.hibernate.orm:hibernate-community-dialects")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
+
+    implementation("org.xerial:sqlite-jdbc:3.45.2.0")
+
+    implementation("com.aventrix.jnanoid:jnanoid:2.0.0")
 
     implementation("commons-validator:commons-validator:1.8.0") {
         exclude(module = "commons-logging")
