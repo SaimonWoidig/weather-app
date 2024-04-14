@@ -11,12 +11,12 @@ spring:
     location: classpath:banner.txt
   jpa:
     database-platform: org.hibernate.community.dialect.SQLiteDialect
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
   datasource:
     driver-class-name: org.sqlite.JDBC
-    # to use in memory:
     url: jdbc:sqlite:file:data.db:?mode=memory&cache=shared
-    # to use a file:
-    #url: jdbc:sqlite:file:data.db?cache=shared
     username: sa
     password:
 backend:

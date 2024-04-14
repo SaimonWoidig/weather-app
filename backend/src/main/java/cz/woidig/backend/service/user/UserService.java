@@ -4,12 +4,18 @@ import cz.woidig.backend.model.User;
 import cz.woidig.backend.model.UserRepository;
 import cz.woidig.backend.utils.id.IDGenerator;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+
 @Service
 @AllArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
     private IDGenerator idGenerator;
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
@@ -23,5 +29,19 @@ public class UserService {
         String uid = idGenerator.generateID();
         User user = new User(uid, email, hashedPassword);
         return createUser(user);
+    }
+
+    public List<User> getUsers() {
+        return userRepository.findAll();
+    }
+
+    public User getUser(String uid) {
+        return userRepository.findUserByUid(uid).orElseThrow(() -> new NoSuchElementException("No user with uid " + uid));
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found with email " + username));
+        return UserPrincipal.createFromUser(user);
     }
 }
