@@ -1,22 +1,27 @@
 package cz.woidig.backend.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
 @Table(name = "users")
+@Getter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Getter(AccessLevel.NONE)
     private Long id;
-    @Getter
     private String uid;
-    @Getter
     private String email;
-    @Getter
     private String hashedPassword;
+    @Nullable
+    @Setter
+    private String appToken;
 
     public User(String uid, String email, String hashedPassword) {
         this.uid = uid;
