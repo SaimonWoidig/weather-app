@@ -1,7 +1,11 @@
 # build output
 dist/
-# generated types
-.astro/
+.solid
+.output
+.vercel
+.netlify
+netlify
+.vinxi
 
 # dependencies
 node_modules/
@@ -12,10 +16,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# environment variables
+# Environment
 .env
-.env.production
-production.env
+.env*.local
 
 # ide files
 .idea
