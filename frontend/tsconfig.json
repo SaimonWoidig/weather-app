@@ -1,27 +1,21 @@
 {
-  "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
-    "types": [
-      "astro/client",
-      "vite/client",
-      "vitest/globals"
-    ],
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "verbatimModuleSyntax": true,
+    "esModuleInterop": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "allowJs": true,
+    "noEmit": true,
+    "strict": true,
+    "types": ["vinxi/types/client", "vite/client"],
+    "isolatedModules": true,
     "baseUrl": ".",
     "paths": {
-      "@components/*": [
-        "src/components/*"
-      ],
-      "@layouts/*": [
-        "src/layouts/*"
-      ],
-      "@lib/*": [
-        "src/lib/*"
-      ],
-    },
-    "jsx": "preserve",
-    "jsxImportSource": "solid-js"
-  },
-  "exclude": [
-    "dist"
-  ]
+      "src/*": ["src/*"]
+    }
+  }
 }
