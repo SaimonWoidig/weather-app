@@ -25,26 +25,28 @@ const LoginForm: Component = () => {
           else setInvalidLogin(false);
         }}
       >
-        <label for="input-username">Email:</label>
-        <input
-          class="input input-bordered"
-          type="email"
-          id="input-username"
-          required
-          placeholder="Email address"
-          value={username()}
-          onInput={(e) => setUsername(e.currentTarget.value)}
-        />
-        <label for="input-password">Password:</label>
-        <input
-          class="input input-bordered"
-          type="password"
-          id="input-password"
-          required
-          placeholder="Password"
-          value={password()}
-          onInput={(e) => setPassword(e.currentTarget.value)}
-        />
+        <label class="input input-bordered flex items-center gap-2">
+          Email
+          <input
+            class="grow"
+            type="email"
+            required
+            placeholder="john.doe@example.com"
+            value={username()}
+            onInput={(e) => setUsername(e.currentTarget.value)}
+          />
+        </label>
+        <label class="input input-bordered flex items-center gap-2">
+          Password
+          <input
+            class="grow"
+            type="password"
+            required
+            placeholder="Password"
+            value={password()}
+            onInput={(e) => setPassword(e.currentTarget.value)}
+          />
+        </label>
         <button type="submit" class="btn btn-primary">
           Login
         </button>
