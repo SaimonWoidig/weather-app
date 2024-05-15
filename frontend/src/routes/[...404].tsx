@@ -1,9 +1,11 @@
+import { Title } from "@solidjs/meta";
 import { A } from "@solidjs/router";
 import { TbError404 } from "solid-icons/tb";
 
 export default function NotFound() {
   return (
     <main>
+      <Title>Page not found</Title>
       <div class="h-screen flex items-center justify-center">
         <div class="card bg-neutral shadow-xl">
           <figure>
