@@ -33,29 +33,33 @@ const RegisterForm: Component = () => {
       >
         <label for="input-username">Email:</label>
         <input
+          class="input invalid:bg-error"
           type="email"
           id="input-username"
           required
+          maxLength={48}
           placeholder="Email address"
           value={username()}
           onInput={(e) => setUsername(e.currentTarget.value)}
         />
         <label for="input-password">Password:</label>
         <input
+          class="input invalid:bg-error"
           type="password"
           id="input-password"
           required
+          minlength={8}
           placeholder="Password"
-          value={password()}
           onInput={(e) => setPassword(e.currentTarget.value)}
         />
         <label for="input-confirm-password">Confirm password:</label>
         <input
+          class={"input bg-error" + (errorMessage() ? " invalid:bg-error" : "")}
           type="password"
           id="input-confirm-password"
           required
+          minlength={8}
           placeholder="Password again"
-          value={confirmPassword()}
           onInput={(e) => setConfirmPassword(e.currentTarget.value)}
         />
         <button type="submit" class="btn btn-primary">
