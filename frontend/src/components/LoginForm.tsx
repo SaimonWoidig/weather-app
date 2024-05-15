@@ -27,6 +27,7 @@ const LoginForm: Component = () => {
       >
         <label for="input-username">Email:</label>
         <input
+          class="input input-bordered"
           type="email"
           id="input-username"
           required
@@ -36,6 +37,7 @@ const LoginForm: Component = () => {
         />
         <label for="input-password">Password:</label>
         <input
+          class="input input-bordered"
           type="password"
           id="input-password"
           required

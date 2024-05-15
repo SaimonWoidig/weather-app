@@ -33,7 +33,7 @@ const RegisterForm: Component = () => {
       >
         <label for="input-username">Email:</label>
         <input
-          class="input invalid:bg-error"
+          class="input input-bordered invalid:border-error"
           type="email"
           id="input-username"
           required
@@ -44,7 +44,7 @@ const RegisterForm: Component = () => {
         />
         <label for="input-password">Password:</label>
         <input
-          class="input invalid:bg-error"
+          class="input input-bordered invalid:border-error"
           type="password"
           id="input-password"
           required
@@ -54,7 +54,10 @@ const RegisterForm: Component = () => {
         />
         <label for="input-confirm-password">Confirm password:</label>
         <input
-          class={"input bg-error" + (errorMessage() ? " invalid:bg-error" : "")}
+          class={
+            "input input-bordered invalid:border-error" +
+            (errorMessage() ? " border-error" : "")
+          }
           type="password"
           id="input-confirm-password"
           required
