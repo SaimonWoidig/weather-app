@@ -7,11 +7,13 @@ export default function Home() {
     <main>
       <Title>Home</Title>
       <h1 class="text-4xl font-bold p-2">Current weather</h1>
-      <WeatherCard
-        precipitation={15}
-        temperature={20}
-        weatherType={WeatherCode.DrizzleModerate}
-      />
+      <div class="flex items-center justify-center">
+        <WeatherCard
+          precipitation={15}
+          temperature={20}
+          weatherType={WeatherCode.DrizzleModerate}
+        />
+      </div>
     </main>
   );
 }

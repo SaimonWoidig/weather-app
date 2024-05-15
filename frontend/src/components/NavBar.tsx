@@ -42,6 +42,9 @@ const NavBar: Component = () => {
               class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-neutral rounded-box w-52"
             >
               <li>
+                <A class="btn btn-ghost text-xl" href="/userarea">
+                  User Area
+                </A>
                 <A class="btn btn-ghost text-xl" href="/logout">
                   Logout
                 </A>

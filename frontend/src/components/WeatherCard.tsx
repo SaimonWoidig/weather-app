@@ -12,7 +12,7 @@ const WeatherCard: Component<WeatherCardProps> = (props) => {
   const { temperature, precipitation, weatherType } = props;
   const weatherIcon = weatherCodeToIcon(weatherType);
   return (
-    <div class="flex items-center justify-center">
+    <div class="flex">
       <div class="card lg:card-side bg-neutral shadow-xl p-20">
         <figure>{weatherIcon}</figure>
         <div class="card-body">
