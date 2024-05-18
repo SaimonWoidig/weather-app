@@ -1,4 +1,4 @@
-import { Match, Show, Switch, type Component } from "solid-js";
+import { Show, type Component } from "solid-js";
 import { useAuth } from "./AuthProvider";
 import { A } from "@solidjs/router";
 
@@ -45,6 +45,13 @@ const NavBar: Component = () => {
                 <A class="btn btn-ghost text-xl" href="/userarea">
                   User Area
                 </A>
+              </li>
+              <li>
+                <A class="btn btn-ghost text-xl" href="/settings">
+                  Settings
+                </A>
+              </li>
+              <li>
                 <A class="btn btn-ghost text-xl" href="/logout">
                   Logout
                 </A>
