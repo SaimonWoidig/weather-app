@@ -1,13 +1,13 @@
 package cz.woidig.backend.service.user;
 
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier.BaseVerification;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import cz.woidig.backend.config.JwtConfig;
 import cz.woidig.backend.model.User;
 import cz.woidig.backend.security.UserEntityUserDetails;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -15,23 +15,13 @@ import org.springframework.stereotype.Service;
 import java.time.Clock;
 
 @Service
+@AllArgsConstructor
 public class JwtTokenService {
     private final Algorithm algorithm;
     private final JwtConfig jwtConfig;
     private final Clock clock;
     private final JWTVerifier verifier;
     private final UserService userService;
-
-    public JwtTokenService(Algorithm algorithm, JwtConfig jwtConfig, Clock clock, UserService userService) {
-        this.algorithm = algorithm;
-        this.jwtConfig = jwtConfig;
-        this.clock = clock;
-        BaseVerification baseVerification = (BaseVerification) JWT
-                .require(algorithm)
-                .acceptLeeway(jwtConfig.getJwtLeewaySeconds());
-        this.verifier = baseVerification.build(clock);
-        this.userService = userService;
-    }
 
     public String createUserJwt(String userId) {
         return JWT.create()
