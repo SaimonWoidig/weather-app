@@ -16,3 +16,15 @@ backend:
     fallback:
       latitude: 0
       longitude: 0
+  security:
+    argon2:
+      enabled: true # clear-text passwords in tests
+      memory: 16384
+      parallelism: 2
+      iterations: 3
+      salt-length: 16
+      hash-length: 32
+    jwt:
+      secret: "test-test-test-test"
+      expiration-seconds: 3600
+      leeway-seconds: 5
