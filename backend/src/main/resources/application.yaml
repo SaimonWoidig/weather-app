@@ -32,3 +32,11 @@ backend:
       # GPS of the Prague castle
       latitude: 50.0911
       longitude: 14.3990416
+  security:
+    argon2:
+      enabled: true
+      memory: 16384
+      parallelism: 2
+      iterations: 3
+      salt-length: 16
+      hash-length: 32

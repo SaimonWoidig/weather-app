@@ -16,3 +16,6 @@ backend:
     fallback:
       latitude: 0
       longitude: 0
+  security:
+    argon2:
+      enabled: false # clear-text passwords in tests

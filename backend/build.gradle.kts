@@ -30,6 +30,8 @@ dependencies {
     implementation("org.liquibase:liquibase-core")
     implementation("org.hibernate.orm:hibernate-community-dialects")
     implementation("org.xerial:sqlite-jdbc")
+    implementation("org.bouncycastle:bcprov-jdk18on:1.78.1")
+    implementation("com.aventrix.jnanoid:jnanoid:2.0.0")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

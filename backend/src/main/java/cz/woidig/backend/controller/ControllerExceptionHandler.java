@@ -1,8 +1,11 @@
 package cz.woidig.backend.controller;
 
 import cz.woidig.backend.dto.ErrorDTO;
+import cz.woidig.backend.exceptions.InvalidPasswordException;
+import cz.woidig.backend.exceptions.UserAlreadyExistsException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -29,6 +32,24 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorDTO handleIllegalArgumentException(IllegalArgumentException e, WebRequest request) {
         return new ErrorDTO(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorDTO handleUserAlreadyExistsException(UserAlreadyExistsException e, WebRequest request) {
+        return new ErrorDTO(HttpStatus.CONFLICT.value(), e.getMessage());
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorDTO handleUserNotFoundException(UsernameNotFoundException e, WebRequest request) {
+        return new ErrorDTO(HttpStatus.UNAUTHORIZED.value(), e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorDTO handleInvalidPasswordException(InvalidPasswordException e, WebRequest request) {
+        return new ErrorDTO(HttpStatus.UNAUTHORIZED.value(), e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
