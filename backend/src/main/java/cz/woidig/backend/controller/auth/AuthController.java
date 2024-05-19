@@ -1,9 +1,9 @@
-package cz.woidig.backend.controller.user;
+package cz.woidig.backend.controller.auth;
 
 import cz.woidig.backend.dto.user.LoginDTO;
 import cz.woidig.backend.dto.user.RegisterUserDTO;
 import cz.woidig.backend.dto.user.UserDTO;
-import cz.woidig.backend.service.user.UserService;
+import cz.woidig.backend.service.user.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,17 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/user")
-public class UserController {
-    private final UserService userService;
+@RequestMapping("/auth")
+public class AuthController {
+    private final AuthService authService;
 
     @PostMapping("/register")
     public UserDTO register(@RequestBody RegisterUserDTO registerUserDTO) {
-        return userService.registerUser(registerUserDTO.email(), registerUserDTO.password());
+        return authService.registerUser(registerUserDTO.email(), registerUserDTO.password());
     }
 
     @PostMapping("/login")
     public UserDTO login(@RequestBody LoginDTO registerUserDTO) {
-        return userService.loginUser(registerUserDTO.email(), registerUserDTO.password());
+        return authService.loginUser(registerUserDTO.email(), registerUserDTO.password());
     }
 }

@@ -32,6 +32,7 @@ dependencies {
     implementation("org.xerial:sqlite-jdbc")
     implementation("org.bouncycastle:bcprov-jdk18on:1.78.1")
     implementation("com.aventrix.jnanoid:jnanoid:2.0.0")
+    implementation("com.auth0:java-jwt:4.4.0")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
