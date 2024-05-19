@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Getter
 @Entity(name = "user")
 @Table(name = "users")
@@ -21,6 +24,9 @@ public class User {
 
     @Column(name = "email", unique = true, nullable = false, length = 320)
     private String email;
+
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private Set<SavedLocation> savedLocations = new HashSet<>();
 
     public User(String userId, String email, String passwordHash) {
         this.userId = userId;
