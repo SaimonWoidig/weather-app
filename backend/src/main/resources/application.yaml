@@ -9,6 +9,21 @@ spring:
       add-mappings: false
   banner:
     location: classpath:banner.txt
+  sql:
+    init:
+      mode: never
+  jpa:
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    generate-ddl: false
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    #url: "jdbc:sqlite:file::memory:?cache=shared"
+    url: "jdbc:sqlite:data.db:?cache=shared"
+    username: sa
+    password:
 backend:
   geo:
     fallback:
