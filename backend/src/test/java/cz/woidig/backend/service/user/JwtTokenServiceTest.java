@@ -1,6 +1,7 @@
 package cz.woidig.backend.service.user;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
@@ -20,6 +21,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
 import java.time.Clock;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,6 +43,21 @@ class JwtTokenServiceTest {
     @BeforeEach
     void setUp() {
         jwtTokenService = new JwtTokenService(algorithm, jwtConfig, clock, verifier, userService);
+    }
+
+    @Test
+    void test_createUserJwt_success() {
+        String expected = "signed token";
+        JWTCreator.Builder mockBuilder = Mockito.mock(JWTCreator.Builder.class, Mockito.RETURNS_SELF);
+        Mockito.when(clock.instant()).thenReturn(new Date(1).toInstant());
+        Mockito.when(mockBuilder.sign(algorithm)).thenReturn(expected);
+        try (MockedStatic<JWT> mock = Mockito.mockStatic(JWT.class)) {
+            mock.when(JWT::create).thenReturn(mockBuilder);
+
+            String actual = jwtTokenService.createUserJwt("userId");
+
+            assertEquals(expected, actual);
+        }
     }
 
     @Test

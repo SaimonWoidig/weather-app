@@ -1,9 +1,12 @@
 package cz.woidig.backend.controller;
 
 import cz.woidig.backend.dto.ErrorDTO;
+import cz.woidig.backend.exceptions.InvalidPasswordException;
+import cz.woidig.backend.exceptions.UserAlreadyExistsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
@@ -53,6 +56,36 @@ class ControllerExceptionHandlerTest {
 
         ErrorDTO expected = new ErrorDTO(500, "Internal server error");
         ErrorDTO actual = controllerExceptionHandler.handleUnhandledException(e, null);
+
+        assertEquals(expected.message(), actual.message());
+    }
+
+    @Test
+    void test_handleUserAlreadyExistsException() {
+        UserAlreadyExistsException e = new UserAlreadyExistsException("User already exists");
+
+        ErrorDTO expected = new ErrorDTO(409, "User already exists");
+        ErrorDTO actual = controllerExceptionHandler.handleUserAlreadyExistsException(e, null);
+
+        assertEquals(expected.message(), actual.message());
+    }
+
+    @Test
+    void test_handleUserNotFoundException() {
+        UsernameNotFoundException e = new UsernameNotFoundException("User not found");
+
+        ErrorDTO expected = new ErrorDTO(401, "User not found");
+        ErrorDTO actual = controllerExceptionHandler.handleUserNotFoundException(e, null);
+
+        assertEquals(expected.message(), actual.message());
+    }
+
+    @Test
+    void test_handleInvalidPasswordException() {
+        InvalidPasswordException e = new InvalidPasswordException("Invalid password");
+
+        ErrorDTO expected = new ErrorDTO(401, "Invalid password");
+        ErrorDTO actual = controllerExceptionHandler.handleInvalidPasswordException(e, null);
 
         assertEquals(expected.message(), actual.message());
     }
