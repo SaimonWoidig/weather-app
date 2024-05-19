@@ -21,7 +21,7 @@ public class User {
     private String hashedPassword;
     @Nullable
     @Setter
-    private String appToken;
+    private String apiToken;
 
     public User(String uid, String email, String hashedPassword) {
         this.uid = uid;

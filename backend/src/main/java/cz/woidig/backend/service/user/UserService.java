@@ -39,9 +39,20 @@ public class UserService implements UserDetailsService {
         return userRepository.findUserByUid(uid).orElseThrow(() -> new NoSuchElementException("No user with uid " + uid));
     }
 
+    public User getUserByEmailAndPassword(String email, String password) {
+        User user = userRepository.findUserByEmail(email).orElse(null);
+        if (user == null) {
+            return null;
+        }
+        if (!passwordEncoder.matches(password, user.getHashedPassword())) {
+            return null;
+        }
+        return user;
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found with email " + username));
+        User user = userRepository.findUserByUid(username).orElseThrow(() -> new UsernameNotFoundException("User not found with email " + username));
         return UserPrincipal.createFromUser(user);
     }
 }

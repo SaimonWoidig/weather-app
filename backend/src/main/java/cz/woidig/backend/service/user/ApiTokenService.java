@@ -7,22 +7,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class UserTokenService {
+public class ApiTokenService {
     private final UserRepository userRepository;
 
-    public String getUserAppToken(String email) {
+    public String getUserApiToken(String email) {
         User user = userRepository.findUserByEmail(email).orElse(null);
         if (user == null) {
             return null;
         }
-        return user.getAppToken();
+        return user.getApiToken();
     }
 
-    public UserPrincipal getUserFromAppToken(String appToken) {
-        User user = userRepository.findUserByAppToken(appToken).orElse(null);
-        if (user == null) {
-            return null;
-        }
-        return UserPrincipal.createFromUser(user);
+    public User getUserFromApiToken(String apiToken) {
+        return userRepository.findUserByApiToken(apiToken).orElse(null);
     }
 }

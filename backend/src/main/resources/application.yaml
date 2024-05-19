@@ -26,6 +26,11 @@ backend:
       latitude: 50.0911
       longitude: 14.3990416
   security:
+    pre-shared-secret: "secret"
+    jwt:
+      secret: "secret"
+      expiration-seconds: 3600
+      leeway-seconds: 5
     argon2:
       enabled: true
       memory: 16384

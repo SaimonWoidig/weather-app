@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.security.SecureRandom;
+import java.time.Clock;
 
 @Configuration
 public class AppConfig {
@@ -20,5 +21,10 @@ public class AppConfig {
         return new NanoIDGenerator(
                 new SecureRandom()
         );
+    }
+
+    @Bean
+    public Clock clock() {
+        return Clock.systemUTC();
     }
 }
