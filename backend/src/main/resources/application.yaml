@@ -24,6 +24,8 @@ spring:
     url: "jdbc:sqlite:data.db:?cache=shared"
     username: sa
     password:
+  liquibase:
+    change-log: "classpath:liquibase/changelog.xml"
 backend:
   geo:
     fallback:
