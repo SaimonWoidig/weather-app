@@ -27,8 +27,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.liquibase:liquibase-core")
     implementation("org.hibernate.orm:hibernate-community-dialects")
-    implementation("org.xerial:sqlite-jdbc:3.45.2.0")
+    implementation("org.xerial:sqlite-jdbc")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -39,6 +40,14 @@ dependencies {
         exclude(module = "commons-collections")
     }
 }
+
+// paths that will be excluded from the coverage report
+var jacocoExcludes = listOf(
+    "**/config/*",
+    "**/model/*",
+    "**/exceptions/*",
+    "**/dto/*"
+)
 
 tasks.withType<Test> {
     useJUnitPlatform()
@@ -52,6 +61,13 @@ tasks.jacocoTestReport {
         xml.required = true
     }
     dependsOn(tasks.test) // tests are required to run before generating the report
+
+    // exclude paths from coverage report
+    classDirectories.setFrom(classDirectories.files.map {
+        fileTree(it).matching {
+            exclude(jacocoExcludes)
+        }
+    })
 }
 tasks.jacocoTestCoverageVerification {
     violationRules {

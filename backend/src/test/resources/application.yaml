@@ -2,13 +2,15 @@ spring:
   jpa:
     database-platform: org.hibernate.community.dialect.SQLiteDialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
     open-in-view: false
   datasource:
     driver-class-name: org.sqlite.JDBC
     url: "jdbc:sqlite:file::memory:?cache=shared"
     username: sa
     password:
+  liquibase:
+    change-log: classpath:liquibase/changelog.xml
 backend:
   geo:
     fallback:
