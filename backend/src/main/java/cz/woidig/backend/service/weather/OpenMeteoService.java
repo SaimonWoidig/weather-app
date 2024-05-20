@@ -40,12 +40,7 @@ public class OpenMeteoService implements WeatherService {
 
     public WeatherDTO getCurrentWeather(float latitude, float longitude) throws WeatherException {
         // Validate input
-        if (latitude < -90.0f || latitude > 90.0f) {
-            throw new IllegalArgumentException("Latitude must be between -90.0 and 90.0");
-        }
-        if (longitude < -180.0f || longitude > 180.0f) {
-            throw new IllegalArgumentException("Longitude must be between -180.0 and 180.0");
-        }
+        validateCoords(latitude, longitude);
 
         // Call OpenMeteo API
         UriBuilder uriBuilder = UriComponentsBuilder.newInstance();
@@ -87,12 +82,7 @@ public class OpenMeteoService implements WeatherService {
     }
 
     public WeatherDaysDTO get7DayForecast(float latitude, float longitude) throws WeatherException {
-        if (latitude < -90.0f || latitude > 90.0f) {
-            throw new IllegalArgumentException("Latitude must be between -90.0 and 90.0");
-        }
-        if (longitude < -180.0f || longitude > 180.0f) {
-            throw new IllegalArgumentException("Longitude must be between -180.0 and 180.0");
-        }
+        validateCoords(latitude, longitude);
 
         // Call OpenMeteo API
         UriBuilder uriBuilder = UriComponentsBuilder.newInstance();
@@ -141,12 +131,7 @@ public class OpenMeteoService implements WeatherService {
     }
 
     public WeatherDaysDTO get7PreviousDays(float latitude, float longitude) throws WeatherException {
-        if (latitude < -90.0f || latitude > 90.0f) {
-            throw new IllegalArgumentException("Latitude must be between -90.0 and 90.0");
-        }
-        if (longitude < -180.0f || longitude > 180.0f) {
-            throw new IllegalArgumentException("Longitude must be between -180.0 and 180.0");
-        }
+        validateCoords(latitude, longitude);
 
         // Call OpenMeteo API
         UriBuilder uriBuilder = UriComponentsBuilder.newInstance();
@@ -192,6 +177,15 @@ public class OpenMeteoService implements WeatherService {
         }
 
         return new WeatherDaysDTO(weatherDTOList, days);
+    }
+
+    static void validateCoords(float latitude, float longitude) {
+        if (latitude < -90.0f || latitude > 90.0f) {
+            throw new IllegalArgumentException("Latitude must be between -90.0 and 90.0");
+        }
+        if (longitude < -180.0f || longitude > 180.0f) {
+            throw new IllegalArgumentException("Longitude must be between -180.0 and 180.0");
+        }
     }
 
     static void validateDailyData(OpenMeteoDaily data) {

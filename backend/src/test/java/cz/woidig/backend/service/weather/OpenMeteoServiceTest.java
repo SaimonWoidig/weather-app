@@ -335,4 +335,19 @@ class OpenMeteoServiceTest {
         WeatherException actual = assertThrows(WeatherException.class, () -> OpenMeteoService.validateDailyData(data));
         assertEquals(expected.getMessage(), actual.getMessage());
     }
+
+    @Test
+    public void test_validateCoords_success() {
+        assertDoesNotThrow(() -> OpenMeteoService.validateCoords(0.0f, 0.0f));
+    }
+
+    @Test
+    public void test_validateCoords_invalidLatitude() {
+        assertThrows(IllegalArgumentException.class, () -> OpenMeteoService.validateCoords(-91.0f, 0.0f));
+    }
+
+    @Test
+    public void test_validateCoords_invalidLongitude() {
+        assertThrows(IllegalArgumentException.class, () -> OpenMeteoService.validateCoords(0.0f, 181.0f));
+    }
 }
