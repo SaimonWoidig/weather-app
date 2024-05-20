@@ -48,7 +48,7 @@ class OpenMeteoServiceTest {
         float precipitation = 0.0f;
         int weatherCode = 1;
         OpenMeteoCurrent meteoCurrent = new OpenMeteoCurrent(temperature, precipitation, weatherCode);
-        OpenMeteoDTO requestData = new OpenMeteoDTO(meteoCurrent);
+        OpenMeteoDTO requestData = new OpenMeteoDTO(meteoCurrent, null);
 
         ResponseEntity<OpenMeteoDTO> responseEntity = ResponseEntity.ofNullable(requestData);
         Mockito.doReturn(responseEntity)
@@ -132,7 +132,7 @@ class OpenMeteoServiceTest {
         float latitude = 0.0f;
         float longitude = 0.0f;
 
-        OpenMeteoDTO responseData = new OpenMeteoDTO(null);
+        OpenMeteoDTO responseData = new OpenMeteoDTO(null, null);
         ResponseEntity<OpenMeteoDTO> responseEntity = ResponseEntity.ofNullable(responseData);
         Mockito.doReturn(responseEntity)
                 .when(mockRestTemplate).getForEntity(Mockito.any(URI.class), Mockito.eq(OpenMeteoDTO.class));
@@ -164,7 +164,7 @@ class OpenMeteoServiceTest {
         float latitude = 0.0f;
         float longitude = 0.0f;
 
-        OpenMeteoDTO responseData = new OpenMeteoDTO(meteoCurrent);
+        OpenMeteoDTO responseData = new OpenMeteoDTO(meteoCurrent, null);
         ResponseEntity<OpenMeteoDTO> responseEntity = ResponseEntity.ofNullable(responseData);
         Mockito.doReturn(responseEntity)
                 .when(mockRestTemplate).getForEntity(Mockito.any(URI.class), Mockito.eq(OpenMeteoDTO.class));
