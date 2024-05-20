@@ -125,37 +125,7 @@ public class OpenMeteoService implements WeatherService {
         }
 
         OpenMeteoDaily data = response.getBody().daily();
-        if (data == null) {
-            throw new WeatherException("OpenMeteo API call failed because daily data is null");
-        }
-
-        if (data.dateStrings() == null) {
-            throw new WeatherException("OpenMeteo API call failed because date strings are null");
-        }
-        if (data.temperaturesMax() == null) {
-            throw new WeatherException("OpenMeteo API call failed because temperatures max are null");
-        }
-        if (data.temperaturesMin() == null) {
-            throw new WeatherException("OpenMeteo API call failed because temperatures min are null");
-        }
-        if (data.precipitations() == null) {
-            throw new WeatherException("OpenMeteo API call failed because precipitations are null");
-        }
-        if (data.weatherCodes() == null) {
-            throw new WeatherException("OpenMeteo API call failed because weather codes are null");
-        }
-        if (data.dateStrings().length != data.temperaturesMax().length) {
-            throw new WeatherException("OpenMeteo API call failed because date strings and temperatures max have different lengths");
-        }
-        if (data.dateStrings().length != data.temperaturesMin().length) {
-            throw new WeatherException("OpenMeteo API call failed because date strings and temperatures min have different lengths");
-        }
-        if (data.dateStrings().length != data.precipitations().length) {
-            throw new WeatherException("OpenMeteo API call failed because date strings and precipitations have different lengths");
-        }
-        if (data.dateStrings().length != data.weatherCodes().length) {
-            throw new WeatherException("OpenMeteo API call failed because date strings and weather codes have different lengths");
-        }
+        validateDailyData(data);
 
         List<WeatherDTO> weatherDTOList = new ArrayList<>();
         List<LocalDate> days = new ArrayList<>();
@@ -209,10 +179,25 @@ public class OpenMeteoService implements WeatherService {
         }
 
         OpenMeteoDaily data = response.getBody().daily();
+        validateDailyData(data);
+
+        List<WeatherDTO> weatherDTOList = new ArrayList<>();
+        List<LocalDate> days = new ArrayList<>();
+
+        // iterate backwards to get from most recent to oldest
+        for (int i = data.dateStrings().length - 1; i >= 0; i--) {
+            float avgTemperature = (data.temperaturesMax()[i] + data.temperaturesMin()[i]) / 2.0f;
+            weatherDTOList.add(new WeatherDTO(avgTemperature, data.precipitations()[i], data.weatherCodes()[i]));
+            days.add(LocalDate.parse(data.dateStrings()[i]));
+        }
+
+        return new WeatherDaysDTO(weatherDTOList, days);
+    }
+
+    static void validateDailyData(OpenMeteoDaily data) {
         if (data == null) {
             throw new WeatherException("OpenMeteo API call failed because daily data is null");
         }
-
         if (data.dateStrings() == null) {
             throw new WeatherException("OpenMeteo API call failed because date strings are null");
         }
@@ -240,17 +225,5 @@ public class OpenMeteoService implements WeatherService {
         if (data.dateStrings().length != data.weatherCodes().length) {
             throw new WeatherException("OpenMeteo API call failed because date strings and weather codes have different lengths");
         }
-
-        List<WeatherDTO> weatherDTOList = new ArrayList<>();
-        List<LocalDate> days = new ArrayList<>();
-
-        // iterate backwards to get from most recent to oldest
-        for (int i = data.dateStrings().length - 1; i >= 0; i--) {
-            float avgTemperature = (data.temperaturesMax()[i] + data.temperaturesMin()[i]) / 2.0f;
-            weatherDTOList.add(new WeatherDTO(avgTemperature, data.precipitations()[i], data.weatherCodes()[i]));
-            days.add(LocalDate.parse(data.dateStrings()[i]));
-        }
-
-        return new WeatherDaysDTO(weatherDTOList, days);
     }
 }
