@@ -27,6 +27,10 @@ public class User {
     @Column(name = "email", unique = true, nullable = false, length = 320)
     private String email;
 
+    @Column(name = "api_token_hash", unique = true, nullable = true, length = 128)
+    @Setter
+    private String apiTokenHash;
+
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private Set<SavedLocation> savedLocations = new HashSet<>();
 
