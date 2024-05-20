@@ -1,6 +1,7 @@
 package cz.woidig.backend.config;
 
 import cz.woidig.backend.filters.JwtAuthFilter;
+import cz.woidig.backend.filters.UserAPITokenFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @AllArgsConstructor
 public class SpringWebSecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
+    private final UserAPITokenFilter userAPITokenFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -26,6 +28,7 @@ public class SpringWebSecurityConfig {
         );
         http.csrf(AbstractHttpConfigurer::disable);
         http.addFilterBefore(jwtAuthFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(userAPITokenFilter, JwtAuthFilter.class);
         return http.build();
     }
 }
