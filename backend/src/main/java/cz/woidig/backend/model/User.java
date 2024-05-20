@@ -3,6 +3,7 @@ package cz.woidig.backend.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,6 +21,7 @@ public class User {
     private String userId;
 
     @Column(name = "password_hash", nullable = false, length = 128)
+    @Setter
     private String passwordHash;
 
     @Column(name = "email", unique = true, nullable = false, length = 320)
