@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
@@ -86,6 +88,26 @@ class ControllerExceptionHandlerTest {
 
         ErrorDTO expected = new ErrorDTO(401, "Invalid password");
         ErrorDTO actual = controllerExceptionHandler.handleInvalidPasswordException(e, null);
+
+        assertEquals(expected.message(), actual.message());
+    }
+
+    @Test
+    void test_handleHttpRequestMethodNotSupportedException() {
+        HttpRequestMethodNotSupportedException e = new HttpRequestMethodNotSupportedException("TEST");
+
+        ErrorDTO expected = new ErrorDTO(405, "Request method 'TEST' is not supported");
+        ErrorDTO actual = controllerExceptionHandler.handleHttpRequestMethodNotSupportedException(e, null);
+
+        assertEquals(expected.message(), actual.message());
+    }
+
+    @Test
+    void test_handleHttpMediaTypeNotSupportedException() {
+        HttpMediaTypeNotSupportedException e = new HttpMediaTypeNotSupportedException("Content-Type 'application/test123' is not supported");
+
+        ErrorDTO expected = new ErrorDTO(415, "Content-Type 'application/test123' is not supported");
+        ErrorDTO actual = controllerExceptionHandler.handleHttpMediaTypeNotSupportedException(e, null);
 
         assertEquals(expected.message(), actual.message());
     }
