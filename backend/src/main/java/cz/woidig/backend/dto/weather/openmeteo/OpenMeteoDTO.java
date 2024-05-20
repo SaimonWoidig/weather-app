@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record OpenMeteoDTO(
         @JsonProperty("current")
-        OpenMeteoCurrent current
+        OpenMeteoCurrent current,
+        @JsonProperty("daily")
+        OpenMeteoDaily daily
 ) {
 }
