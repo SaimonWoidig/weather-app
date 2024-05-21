@@ -43,23 +43,21 @@ jobs:
           key: ${{runner.os}}-pnpm-store-${{hashFiles('**/pnpm-lock.yaml')}}
           restore-keys: |
             ${{runner.os}}-pnpm-store-
-      # install deps, run build and tests with code coverage
+      # install dependencies and tsc, check for errors and build
       - name: install deps
         run: pnpm install
+      - name: install tsc
+        run: npm install -g typescript
+      - name:
+        run: tsc --skipLibCheck --noEmit
       - name: build
         run: pnpm run build
-      - name: test and coverage
-        run: pnpm run test
-      - name: upload code coverage to codecov
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{secrets.CODECOV_TOKEN}}
-          flags: frontend
-          file: frontend/coverage/cobertura-coverage.xml
-      # upload artifacts
-      - name: upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: Package
-          path: frontend/dist
-          retention-days: 1
+      # solid-start and testing is not ready yet
+      # - name: test and coverage
+      #   run: pnpm run test
+      # - name: upload code coverage to codecov
+      #   uses: codecov/codecov-action@v4
+      #   with:
+      #     token: ${{secrets.CODECOV_TOKEN}}
+      #     flags: frontend
+      #     file: frontend/coverage/cobertura-coverage.xml
