@@ -3,6 +3,7 @@ import { changePassword } from "src/lib/user/password";
 import { useAuth } from "./AuthProvider";
 
 type ChangePasswordFormProps = {
+  userId: string;
   authToken: string;
 };
 
@@ -27,7 +28,11 @@ const ChangePasswordForm: Component<ChangePasswordFormProps> = (props) => {
             return;
           }
           setNewPasswordLoading(true);
-          const result = await changePassword(props.authToken, password());
+          const result = await changePassword(
+            props.userId,
+            props.authToken,
+            password()
+          );
           if (result) setNewPasswordErrorMessage(result.message || "Error");
           else {
             setNewPasswordErrorMessage("");

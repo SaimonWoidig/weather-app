@@ -21,7 +21,6 @@ export async function resetAPIToken(
       `/user/${userId}/settings/token`,
       serverEnv.BACKEND_API_URL
     );
-    console.log(apiUrl);
     const response = await fetch(apiUrl, {
       method: "POST",
       headers: {
@@ -42,14 +41,45 @@ export async function resetAPIToken(
   }
 }
 
+type ChangePasswordRequest = {
+  newPassword: string;
+};
+
 export async function changePassword(
+  userId: string,
   token: string,
   newPassword: string
 ): Promise<Error | undefined> {
-  // simulate long running call
-  await new Promise<void>((res) => setTimeout(() => res(), 1000));
+  console.log("Changing password for user", userId);
+  if (!newPassword) {
+    return new Error("Password is required");
+  }
+  if (newPassword.length < 8) {
+    return new Error("Password must be at least 8 characters");
+  }
+  try {
+    const apiUrl = new URL(
+      `/user/${userId}/settings/password`,
+      serverEnv.BACKEND_API_URL
+    );
 
-  // TODO: connect to API
+    const requestData: ChangePasswordRequest = { newPassword };
+    const response = await fetch(apiUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(requestData),
+    });
+    if (response.ok) {
+      return;
+    }
 
+    console.error("Failed to change password for user ", userId, response);
+    throw new Error("Failed to change password");
+  } catch (err) {
+    return err as Error;
+  }
   return;
 }

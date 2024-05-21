@@ -18,7 +18,10 @@ export default function Settings() {
       <h2 class="text-2xl font-bold p-2">API token</h2>
       <NewAPITokenForm userId={auth.user()!.userId} authToken={auth.token()!} />
       <h2 class="text-2xl font-bold p-2">Change password</h2>
-      <ChangePasswordForm authToken={auth.token()!} />
+      <ChangePasswordForm
+        userId={auth.user()!.userId}
+        authToken={auth.token()!}
+      />
     </main>
   );
 }
