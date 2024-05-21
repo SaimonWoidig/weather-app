@@ -1,8 +1,9 @@
-import { VsError } from "solid-icons/vs";
+import { VsCheck, VsError } from "solid-icons/vs";
 import { Match, Switch, createSignal, type Component } from "solid-js";
 import { resetAPIToken } from "src/lib/user/password";
 
 type NewAPITokenFormProps = {
+  userId: string;
   authToken: string;
 };
 
@@ -18,7 +19,7 @@ const NewAPITokenForm: Component<NewAPITokenFormProps> = (props) => {
           class="btn btn-primary"
           onClick={async () => {
             setNewAPITokenLoading(true);
-            const result = await resetAPIToken(props.authToken);
+            const result = await resetAPIToken(props.userId, props.authToken);
             if ("error" in result) {
               const errMessage = result.error?.message;
               setNewAPITokenLoading(false);
@@ -46,8 +47,15 @@ const NewAPITokenForm: Component<NewAPITokenFormProps> = (props) => {
           </Match>
           <Match when={newAPIToken()}>
             <div class="alert alert-success shadow-lg w-max">
-              <span>New API token:</span>
-              <code>{newAPIToken()}</code>
+              <VsCheck />
+              <span>Token: </span>
+              <code class="bg-neutral text-neutral-content rounded-md p-[0.15rem]">
+                {newAPIToken()}
+              </code>
+              <span>UserID: </span>
+              <code class="bg-neutral text-neutral-content rounded-md p-[0.15rem]">
+                {props.userId}
+              </code>
             </div>
           </Match>
         </Switch>
