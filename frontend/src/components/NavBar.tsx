@@ -1,6 +1,6 @@
+import { A } from "@solidjs/router";
 import { Show, type Component } from "solid-js";
 import { useAuth } from "./AuthProvider";
-import { A } from "@solidjs/router";
 
 const NavBar: Component = () => {
   const auth = useAuth();
@@ -23,7 +23,7 @@ const NavBar: Component = () => {
       </div>
       <Show when={auth.isLoggedInFn()}>
         <div class="flex-none gap-2">
-          <p>{user()}</p>
+          <p>{user()?.email || "Unknown"}</p>
           <div class="dropdown dropdown-end">
             <div
               tabindex="0"
@@ -33,7 +33,9 @@ const NavBar: Component = () => {
               <div class="w-16 rounded-full">
                 <img
                   alt="User Avatar"
-                  src={`https://identicon.rmhdev.net/${user()}/circle.png`}
+                  src={`https://identicon.rmhdev.net/${
+                    user()?.userId || "unknown"
+                  }/circle.png`}
                 />
               </div>
             </div>

@@ -4,14 +4,16 @@ import {
   createContext,
   createSignal,
   useContext,
-  type ParentComponent,
   type Accessor,
+  type ParentComponent,
 } from "solid-js";
+import { login } from "src/lib/auth/auth";
+import type { UserData } from "src/lib/types";
 
 type AuthContextT = {
-  user: Accessor<string | null>;
+  user: Accessor<UserData | null>;
   token: Accessor<string | null>;
-  logInFn: (username: string, password: string) => Promise<Error | null>;
+  logInFn: (email: string, password: string) => Promise<Error | null>;
   logOutFn: () => Promise<void>;
   isLoggedInFn: () => boolean;
 };
@@ -21,7 +23,7 @@ const AuthContext = createContext<AuthContextT>();
 const AuthProvider: ParentComponent = (props) => {
   const navigate = useNavigate();
 
-  const [user, setUser] = makePersisted(createSignal<string | null>(null), {
+  const [user, setUser] = makePersisted(createSignal<UserData | null>(null), {
     name: "userInfo",
     storage: cookieStorage,
   });
@@ -30,14 +32,19 @@ const AuthProvider: ParentComponent = (props) => {
     storage: cookieStorage,
   });
 
-  const logInFn = async (username: string, password: string) => {
-    if (username !== "admin@example.com" || password !== "password") {
-      return new Error("Invalid login");
+  const logInFn = async (email: string, password: string) => {
+    try {
+      const loginResponse = await login(email, password);
+      setUser({ email: loginResponse.email, userId: loginResponse.userId });
+      setToken(loginResponse.jwtToken);
+      navigate("/");
+      return null;
+    } catch (err) {
+      if (err instanceof Error) {
+        return err;
+      }
+      return new Error("Unexpected error");
     }
-    setUser(username);
-    setToken("some token");
-    navigate("/");
-    return null;
   };
 
   const logOutFn = async () => {
