@@ -1,3 +1,7 @@
+"use server";
+
+import { serverEnv } from "../env/server/env";
+
 export type Location = {
   id: string;
   name: string;
@@ -5,28 +9,37 @@ export type Location = {
   longitude: number;
 };
 
-export async function getUserLocations(token: string): Promise<Location[]> {
-  "use server";
+type LocationResponse = {
+  locationId: string;
+  name: string;
+  latitude: number;
+  longitude: number;
+};
 
-  if (!token) {
-    throw new Error("No token provided");
+export async function getUserLocations(
+  userId: string,
+  token: string
+): Promise<Location[]> {
+  const apiUrl = new URL(
+    `/user/${userId}/locations`,
+    serverEnv.BACKEND_API_URL
+  );
+  const response = await fetch(apiUrl, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (response.ok) {
+    const data: LocationResponse[] = await response.json();
+    return data.map((location) => ({
+      id: location.locationId,
+      name: location.name,
+      latitude: location.latitude,
+      longitude: location.longitude,
+    }));
   }
-
-  // simulate long running call
-  await new Promise<void>((res) => setTimeout(() => res(), 1000));
-
-  return [
-    {
-      id: "unique1",
-      name: "Harcovské koleje, blok D",
-      latitude: 50.770455,
-      longitude: 15.088303,
-    },
-    {
-      id: "unique2",
-      name: "Harcovské koleje, blok C",
-      latitude: 50.770455,
-      longitude: 15.088303,
-    },
-  ];
+  console.error("Failed to get locations", response);
+  throw new Error("Failed to get locations");
 }

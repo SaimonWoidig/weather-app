@@ -1,5 +1,6 @@
 import { Title } from "@solidjs/meta";
 import { Navigate } from "@solidjs/router";
+import { VsError, VsInfo } from "solid-icons/vs";
 import {
   For,
   Match,
@@ -12,7 +13,6 @@ import {
 import { useAuth } from "src/components/AuthProvider";
 import WeatherCard from "src/components/WeatherCard";
 import { getUserLocations, type Location } from "src/lib/location/location";
-import { VsError, VsInfo } from "solid-icons/vs";
 import {
   getForecastNext7Days,
   getForecastPrev7Days,
@@ -25,7 +25,9 @@ export default function UserArea() {
     return <Navigate href="/login" />;
   }
 
-  const [userLocations] = createResource(() => getUserLocations(auth.token()!));
+  const [userLocations] = createResource(() =>
+    getUserLocations(auth.user()?.userId!, auth.token()!)
+  );
 
   const [location, setLocation] = createSignal<Location | undefined>();
 
