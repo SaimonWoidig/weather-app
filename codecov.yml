@@ -29,15 +29,16 @@ flag_management:
           target: 80%
         - type: patch
           target: 80%
-    - name: frontend
-      paths:
-        - frontend
-      carryforward: true
-      statuses:
-        - type: project
-          target: 80%
-        - type: patch
-          target: 80%
+    # TODO: when solid-start ready for tests, implement
+    # - name: frontend
+    #   paths:
+    #     - frontend
+    #   carryforward: true
+    #   statuses:
+    #     - type: project
+    #       target: 80%
+    #     - type: patch
+    #       target: 80%
 comment:
   layout: "diff, flags, files"
   behavior: default
