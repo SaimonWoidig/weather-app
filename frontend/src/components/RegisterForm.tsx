@@ -1,6 +1,6 @@
+import { Navigate } from "@solidjs/router";
 import { Show, createSignal, type Component } from "solid-js";
 import { useAuth } from "./AuthProvider";
-import { Navigate } from "@solidjs/router";
 
 const RegisterForm: Component = () => {
   const auth = useAuth();
@@ -8,7 +8,7 @@ const RegisterForm: Component = () => {
     return <Navigate href="/" />;
   }
 
-  const [username, setUsername] = createSignal("");
+  const [email, setEmail] = createSignal("");
   const [password, setPassword] = createSignal("");
   const [confirmPassword, setConfirmPassword] = createSignal("");
   const [errorMessage, setErrorMessage] = createSignal("");
@@ -25,10 +25,12 @@ const RegisterForm: Component = () => {
             setErrorMessage("Passwords do not match");
             return;
           }
-          // TODO: replace with registration function and logic
-          if (await auth.logInFn(username(), password()))
-            setErrorMessage("User already exists");
-          else setErrorMessage("");
+          const authErr = await auth.registerFn(email(), password());
+          if (authErr) {
+            setErrorMessage(authErr.message);
+            return;
+          }
+          setErrorMessage("");
         }}
       >
         <label class="input input-bordered flex items-center gap-2">
@@ -40,8 +42,8 @@ const RegisterForm: Component = () => {
             required
             maxLength={48}
             placeholder="john.doe@example.com"
-            value={username()}
-            onInput={(e) => setUsername(e.currentTarget.value)}
+            value={email()}
+            onInput={(e) => setEmail(e.currentTarget.value)}
           />
         </label>
         <label class="input input-bordered flex items-center gap-2">

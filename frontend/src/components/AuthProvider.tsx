@@ -7,7 +7,7 @@ import {
   type Accessor,
   type ParentComponent,
 } from "solid-js";
-import { login } from "src/lib/auth/auth";
+import { login, register } from "src/lib/auth/auth";
 import type { UserData } from "src/lib/types";
 
 type AuthContextT = {
@@ -16,6 +16,7 @@ type AuthContextT = {
   logInFn: (email: string, password: string) => Promise<Error | null>;
   logOutFn: () => Promise<void>;
   isLoggedInFn: () => boolean;
+  registerFn: (email: string, password: string) => Promise<Error | null>;
 };
 
 const AuthContext = createContext<AuthContextT>();
@@ -56,6 +57,24 @@ const AuthProvider: ParentComponent = (props) => {
 
   const isLoggedInFn = () => !!user() && !!token();
 
+  const registerFn = async (email: string, password: string) => {
+    try {
+      const registerResponse = await register(email, password);
+      setUser({
+        email: registerResponse.email,
+        userId: registerResponse.userId,
+      });
+      setToken(registerResponse.jwtToken);
+      navigate("/");
+      return null;
+    } catch (err) {
+      if (err instanceof Error) {
+        return err;
+      }
+      return new Error("Unexpected error");
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -64,6 +83,7 @@ const AuthProvider: ParentComponent = (props) => {
         logInFn,
         logOutFn,
         isLoggedInFn,
+        registerFn,
       }}
     >
       {props.children}
