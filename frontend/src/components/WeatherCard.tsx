@@ -1,6 +1,9 @@
 import type { Component } from "solid-js";
-import { weatherCodeToIcon } from "src/lib/weather/weather";
 import type WeatherCode from "src/lib/weather/weather_code";
+import {
+  weatherCodeToIcon,
+  weatherCodeToString,
+} from "src/lib/weather/weather_code";
 
 type WeatherCardProps = {
   title?: string;
@@ -18,8 +21,15 @@ const WeatherCard: Component<WeatherCardProps> = (props) => {
       <div class="card-body">
         {props.title && <h2 class="card-title">{props.title}</h2>}
         <ul>
-          <li>Temperature: {temperature} °C</li>
-          <li>Precipitation: {precipitation} mm</li>
+          <li class="font-bold">Temperature: {temperature} °C</li>
+          <li class="font-bold">Precipitation: {precipitation} mm</li>
+          <li class="font-bold">Report:</li>
+          <p>
+            We can expect the weather to be{" "}
+            <strong>{weatherCodeToString(weatherType)}</strong> with the
+            temperature being <strong>{temperature} °C</strong> and the
+            precipitation being <strong>{precipitation} mm</strong>.
+          </p>
         </ul>
       </div>
     </div>
