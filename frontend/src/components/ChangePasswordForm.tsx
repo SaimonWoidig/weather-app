@@ -36,14 +36,15 @@ const ChangePasswordForm: Component<ChangePasswordFormProps> = (props) => {
           if (result) setNewPasswordErrorMessage(result.message || "Error");
           else {
             setNewPasswordErrorMessage("");
-            auth.logOutFn();
+            await auth.logOutFn();
           }
           setNewPasswordLoading(false);
         }}
       >
         <label class="input input-bordered flex items-center gap-2">
-          New password
+          Password
           <input
+            class="w-full"
             type="password"
             placeholder="Password"
             minLength={8}
@@ -52,8 +53,9 @@ const ChangePasswordForm: Component<ChangePasswordFormProps> = (props) => {
           />
         </label>
         <label class="input input-bordered flex items-center gap-2">
-          Confirm new password
+          Confirm
           <input
+            class="w-full"
             type="password"
             placeholder="Password again"
             minLength={8}
