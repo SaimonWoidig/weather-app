@@ -1,3 +1,6 @@
+"use server";
+
+import { serverEnv } from "../env/server/env";
 import WeatherCode from "./weather_code";
 
 type Forecast = {
@@ -6,109 +9,131 @@ type Forecast = {
   precipitation: number;
 };
 
+type DaysForecast = {
+  weather: Forecast[];
+  days: string[];
+};
+
+type GetForecastResponse = {
+  weatherCode: WeatherCode;
+  temperature: number;
+  precipitation: number;
+};
+
+type Get7DayForecastResponse = {
+  weather: GetForecastResponse[];
+  days: string[];
+};
+
+export const getCurrentWeather = async (
+  latitude: number,
+  longitude: number
+): Promise<Forecast> => {
+  const apiUrl = new URL(
+    `/weather/current?latitude=${latitude}&longitude=${longitude}`,
+    serverEnv.BACKEND_API_URL
+  );
+  try {
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.ok) {
+      const data: GetForecastResponse = await response.json();
+      return {
+        weatherType: data.weatherCode,
+        temperature: data.temperature,
+        precipitation: data.precipitation,
+      };
+    }
+
+    throw new Error("Unexpected error");
+  } catch (err) {
+    console.error("Failed to get weather", err);
+    throw new Error("Unexpected error");
+  }
+};
+
 export const getForecastNext7Days = async (
   token: string,
   latitude: number,
   longitude: number
-): Promise<Forecast[]> => {
-  "use server";
+): Promise<DaysForecast> => {
+  const apiUrl = new URL(
+    `/weather/forecast?latitude=${latitude}&longitude=${longitude}`,
+    serverEnv.BACKEND_API_URL
+  );
+  try {
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-  if (!token) {
-    throw new Error("No token provided");
+    if (response.ok) {
+      const data: Get7DayForecastResponse = await response.json();
+      const weather: Forecast[] = data.weather.map((w) => ({
+        weatherType: w.weatherCode,
+        temperature: w.temperature,
+        precipitation: w.precipitation,
+      }));
+      return {
+        weather: weather,
+        days: data.days,
+      };
+    }
+
+    throw new Error("Unexpected error");
+  } catch (err) {
+    console.error("Failed to get 7 day forecast", err);
+    throw new Error("Unexpected error");
   }
+};
 
-  // simulate long running call
-  await new Promise<void>((res) => setTimeout(() => res(), 3000));
-
-  // TODO: connect to API
-  return [
-    {
-      weatherType: WeatherCode.Fog,
-      temperature: 10,
-      precipitation: 0,
-    },
-    {
-      weatherType: WeatherCode.Overcast,
-      temperature: 13,
-      precipitation: 1,
-    },
-    {
-      weatherType: WeatherCode.Clear,
-      temperature: 22,
-      precipitation: 0,
-    },
-    {
-      weatherType: WeatherCode.RainLight,
-      temperature: 17,
-      precipitation: 3,
-    },
-    {
-      weatherType: WeatherCode.RainHeavy,
-      temperature: 15,
-      precipitation: 5,
-    },
-    {
-      weatherType: WeatherCode.Overcast,
-      temperature: 18,
-      precipitation: 0,
-    },
-    {
-      weatherType: WeatherCode.PartlyCloudy,
-      temperature: 19,
-      precipitation: 0,
-    },
-  ];
+type Get7PrevDayForecastResponse = {
+  weather: GetForecastResponse[];
+  days: string[];
 };
 
 export const getForecastPrev7Days = async (
   token: string,
   latitude: number,
   longitude: number
-): Promise<Forecast[]> => {
-  "use server";
-  if (!token) {
-    throw new Error("No token provided");
+): Promise<DaysForecast> => {
+  const apiUrl = new URL(
+    `/weather/previous?latitude=${latitude}&longitude=${longitude}`,
+    serverEnv.BACKEND_API_URL
+  );
+  try {
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      const data: Get7PrevDayForecastResponse = await response.json();
+      const weather: Forecast[] = data.weather.map((w) => ({
+        weatherType: w.weatherCode,
+        temperature: w.temperature,
+        precipitation: w.precipitation,
+      }));
+      return {
+        weather: weather,
+        days: data.days,
+      };
+    }
+
+    throw new Error("Unexpected error");
+  } catch (err) {
+    console.error("Failed to previous 7 day weather", err);
+    throw new Error("Unexpected error");
   }
-
-  // simulate long running call
-  await new Promise<void>((res) => setTimeout(() => res(), 2000));
-
-  // TODO: connect to API
-  return [
-    {
-      weatherType: WeatherCode.SnowLight,
-      temperature: 0,
-      precipitation: 2,
-    },
-    {
-      weatherType: WeatherCode.SnowHeavy,
-      temperature: -5,
-      precipitation: 5,
-    },
-    {
-      weatherType: WeatherCode.SnowHeavy,
-      temperature: -12,
-      precipitation: 8,
-    },
-    {
-      weatherType: WeatherCode.SnowLight,
-      temperature: -5,
-      precipitation: 6,
-    },
-    {
-      weatherType: WeatherCode.SnowGrains,
-      temperature: 0,
-      precipitation: 2,
-    },
-    {
-      weatherType: WeatherCode.Overcast,
-      temperature: 4,
-      precipitation: 0.5,
-    },
-    {
-      weatherType: WeatherCode.PartlyCloudy,
-      temperature: 6,
-      precipitation: 0,
-    },
-  ];
 };

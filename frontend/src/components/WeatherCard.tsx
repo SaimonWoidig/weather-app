@@ -10,6 +10,7 @@ type WeatherCardProps = {
   temperature: number;
   precipitation: number;
   weatherType: WeatherCode;
+  date?: string;
 };
 
 const WeatherCard: Component<WeatherCardProps> = (props) => {
@@ -24,6 +25,7 @@ const WeatherCard: Component<WeatherCardProps> = (props) => {
           <li class="font-bold">Temperature: {temperature} °C</li>
           <li class="font-bold">Precipitation: {precipitation} mm</li>
           <li class="font-bold">Report:</li>
+          {props.date && <li class="font-bold">Date: {props.date}</li>}
           <p>
             We can expect the weather to be{" "}
             <strong>{weatherCodeToString(weatherType)}</strong> with the

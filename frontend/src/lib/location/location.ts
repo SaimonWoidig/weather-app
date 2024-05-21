@@ -16,6 +16,29 @@ type LocationResponse = {
   longitude: number;
 };
 
+export async function getFallBackLocation(): Promise<Location> {
+  const apiUrl = new URL(`/geo/fallback`, serverEnv.BACKEND_API_URL);
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: "GET",
+    });
+    if (response.ok) {
+      const data: LocationResponse = await response.json();
+      return {
+        id: data.locationId,
+        name: data.name,
+        latitude: data.latitude,
+        longitude: data.longitude,
+      };
+    }
+    throw new Error("Failed to get fallback location");
+  } catch (err) {
+    console.error("Failed to get fallback location", err);
+    throw new Error("Failed to get fallback location");
+  }
+}
+
 export async function getUserLocations(
   userId: string,
   token: string

@@ -115,7 +115,7 @@ export default function UserArea() {
                     <div class="flex flex-col">
                       <p>Shift+Scroll to view days</p>
                       <div class="carousel w-[48rem]">
-                        <For each={forecastNext7Days()}>
+                        <For each={forecastNext7Days()?.weather}>
                           {(day, idx) => {
                             return (
                               <div class="carousel-item">
@@ -124,6 +124,7 @@ export default function UserArea() {
                                   precipitation={day.precipitation}
                                   temperature={day.temperature}
                                   weatherType={day.weatherType}
+                                  date={forecastNext7Days()?.days[idx()]}
                                 />
                               </div>
                             );
@@ -153,7 +154,7 @@ export default function UserArea() {
                     <div class="flex flex-col">
                       <p>Shift+Scroll to view days</p>
                       <div class="carousel w-[48rem]">
-                        <For each={forecastPrev7Days()}>
+                        <For each={forecastPrev7Days()?.weather}>
                           {(day, idx) => {
                             return (
                               <div class="carousel-item">
@@ -162,6 +163,7 @@ export default function UserArea() {
                                   precipitation={day.precipitation}
                                   temperature={day.temperature}
                                   weatherType={day.weatherType}
+                                  date={forecastPrev7Days()?.days[idx()]}
                                 />
                               </div>
                             );
