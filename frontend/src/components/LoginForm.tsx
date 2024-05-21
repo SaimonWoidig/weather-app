@@ -10,7 +10,6 @@ const LoginForm: Component = () => {
 
   const [email, setEmail] = createSignal("");
   const [password, setPassword] = createSignal("");
-  const [invalidLogin, setInvalidLogin] = createSignal(false);
   const [errorMessage, setErrorMessage] = createSignal("");
 
   return (
@@ -24,11 +23,9 @@ const LoginForm: Component = () => {
           const authErr = await auth.logInFn(email(), password());
           if (authErr) {
             setErrorMessage(authErr.message);
-            setInvalidLogin(true);
             return;
           }
           setErrorMessage("");
-          setInvalidLogin(false);
         }}
       >
         <label class="input input-bordered flex items-center gap-2">
@@ -56,8 +53,8 @@ const LoginForm: Component = () => {
         <button type="submit" class="btn btn-primary">
           Login
         </button>
-        <Show when={invalidLogin()}>
-          <p class="text-error">Invalid login</p>
+        <Show when={errorMessage()}>
+          <p class="text-error">Error: {errorMessage()}</p>
         </Show>
       </form>
     </div>

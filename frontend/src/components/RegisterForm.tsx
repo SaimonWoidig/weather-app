@@ -73,7 +73,7 @@ const RegisterForm: Component = () => {
           Register
         </button>
         <Show when={errorMessage()}>
-          <p class="text-error">{errorMessage()}</p>
+          <p class="text-error">Error: {errorMessage()}</p>
         </Show>
       </form>
     </div>
