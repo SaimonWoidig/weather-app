@@ -4,6 +4,7 @@ import {
   optional,
   picklist,
   string,
+  url,
   type Output,
 } from "valibot";
 
@@ -12,7 +13,7 @@ export const serverEnvSchema = object({
     picklist(["development", "production", "test"]),
     "development"
   ),
-  SESSION_SECRET: string([minLength(32)]),
+  BACKEND_API_URL: string([minLength(1), url()]),
 });
 
 export type ServerEnv = Output<typeof serverEnvSchema>;

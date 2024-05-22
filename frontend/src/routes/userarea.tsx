@@ -1,5 +1,6 @@
 import { Title } from "@solidjs/meta";
 import { Navigate } from "@solidjs/router";
+import { VsError, VsInfo } from "solid-icons/vs";
 import {
   For,
   Match,
@@ -12,7 +13,6 @@ import {
 import { useAuth } from "src/components/AuthProvider";
 import WeatherCard from "src/components/WeatherCard";
 import { getUserLocations, type Location } from "src/lib/location/location";
-import { VsError, VsInfo } from "solid-icons/vs";
 import {
   getForecastNext7Days,
   getForecastPrev7Days,
@@ -25,7 +25,9 @@ export default function UserArea() {
     return <Navigate href="/login" />;
   }
 
-  const [userLocations] = createResource(() => getUserLocations(auth.token()!));
+  const [userLocations] = createResource(() =>
+    getUserLocations(auth.user()?.userId!, auth.token()!)
+  );
 
   const [location, setLocation] = createSignal<Location | undefined>();
 
@@ -113,7 +115,7 @@ export default function UserArea() {
                     <div class="flex flex-col">
                       <p>Shift+Scroll to view days</p>
                       <div class="carousel w-[48rem]">
-                        <For each={forecastNext7Days()}>
+                        <For each={forecastNext7Days()?.weather}>
                           {(day, idx) => {
                             return (
                               <div class="carousel-item">
@@ -122,6 +124,7 @@ export default function UserArea() {
                                   precipitation={day.precipitation}
                                   temperature={day.temperature}
                                   weatherType={day.weatherType}
+                                  date={forecastNext7Days()?.days[idx()]}
                                 />
                               </div>
                             );
@@ -151,7 +154,7 @@ export default function UserArea() {
                     <div class="flex flex-col">
                       <p>Shift+Scroll to view days</p>
                       <div class="carousel w-[48rem]">
-                        <For each={forecastPrev7Days()}>
+                        <For each={forecastPrev7Days()?.weather}>
                           {(day, idx) => {
                             return (
                               <div class="carousel-item">
@@ -160,6 +163,7 @@ export default function UserArea() {
                                   precipitation={day.precipitation}
                                   temperature={day.temperature}
                                   weatherType={day.weatherType}
+                                  date={forecastPrev7Days()?.days[idx()]}
                                 />
                               </div>
                             );

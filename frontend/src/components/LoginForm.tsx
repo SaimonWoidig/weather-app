@@ -1,6 +1,6 @@
+import { Navigate } from "@solidjs/router";
 import { Show, createSignal, type Component } from "solid-js";
 import { useAuth } from "./AuthProvider";
-import { Navigate } from "@solidjs/router";
 
 const LoginForm: Component = () => {
   const auth = useAuth();
@@ -8,9 +8,9 @@ const LoginForm: Component = () => {
     return <Navigate href="/" />;
   }
 
-  const [username, setUsername] = createSignal("admin@example.com");
-  const [password, setPassword] = createSignal("password");
-  const [invalidLogin, setInvalidLogin] = createSignal(false);
+  const [email, setEmail] = createSignal("");
+  const [password, setPassword] = createSignal("");
+  const [errorMessage, setErrorMessage] = createSignal("");
 
   return (
     <div class="flex flex-col gap-4 items-center h-screen justify-center">
@@ -20,9 +20,12 @@ const LoginForm: Component = () => {
         method="post"
         onSubmit={async (e: SubmitEvent) => {
           e.preventDefault();
-          // TODO: handle errors appropriately
-          if (await auth.logInFn(username(), password())) setInvalidLogin(true);
-          else setInvalidLogin(false);
+          const authErr = await auth.logInFn(email(), password());
+          if (authErr) {
+            setErrorMessage(authErr.message);
+            return;
+          }
+          setErrorMessage("");
         }}
       >
         <label class="input input-bordered flex items-center gap-2">
@@ -32,8 +35,8 @@ const LoginForm: Component = () => {
             type="email"
             required
             placeholder="john.doe@example.com"
-            value={username()}
-            onInput={(e) => setUsername(e.currentTarget.value)}
+            value={email()}
+            onInput={(e) => setEmail(e.currentTarget.value)}
           />
         </label>
         <label class="input input-bordered flex items-center gap-2">
@@ -50,8 +53,8 @@ const LoginForm: Component = () => {
         <button type="submit" class="btn btn-primary">
           Login
         </button>
-        <Show when={invalidLogin()}>
-          <p class="text-error">Invalid login</p>
+        <Show when={errorMessage()}>
+          <p class="text-error">Error: {errorMessage()}</p>
         </Show>
       </form>
     </div>
