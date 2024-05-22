@@ -1,3 +1,4 @@
+import { VsError } from "solid-icons/vs";
 import {
   ErrorBoundary,
   Suspense,
@@ -75,7 +76,16 @@ const CurrentWeatherForm: Component = () => {
           Show weather
         </button>
       </form>
-      <ErrorBoundary fallback={(error) => <div>{error.message}</div>}>
+      <ErrorBoundary
+        fallback={(error) => (
+          <div class="alert alert-error shadow-lg w-max">
+            <VsError />
+            <span class="pl-2">
+              Failed to load weather: {error?.message || "Unexpected error"}
+            </span>
+          </div>
+        )}
+      >
         <Suspense
           fallback={<span class="loading loading-dots loading-lg"></span>}
         >

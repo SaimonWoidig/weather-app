@@ -6,11 +6,13 @@ const CurrentWeather: Component = () => {
   return (
     <div class="flex flex-col gap-2">
       <ErrorBoundary
-        fallback={() => {
+        fallback={(error) => {
           return (
             <div class="alert alert-error shadow-lg w-max">
               <VsError />
-              <span class="pl-2">Failed to load weather</span>
+              <span class="pl-2">
+                Failed to load weather: {error?.message || "Unexpected error"}
+              </span>
             </div>
           );
         }}
