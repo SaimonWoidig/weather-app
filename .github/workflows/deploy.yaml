@@ -130,6 +130,6 @@ jobs:
       - name: Decode kubeconfig secret and save to file
         run: "echo ${{secrets.KUBECONFIG_B64}} | base64 -d > kubeconfig.yaml && chmod 600 kubeconfig.yaml"
       - name: Deploy via helm
-        run: helm upgrade -i -n weather-app --create-namespace --atomic --set backend.image.tag=${{github.event.release.tag_name}} --set frontend.image.tag=${{github.event.release.tag_name}} --set backend.config.jwt.secret=${{secrets.JWT_SECRET}} weather-app ./weather-app
+        run: helm upgrade -i -n weather-app --create-namespace --atomic --set backend.image.tag=${{github.event.release.tag_name}} --set frontend.image.tag=${{github.event.release.tag_name}} --set backend.config.jwt.secret=${{secrets.JWT_SECRET}} --set host.url=${{vars.ENV_URL}} weather-app ./weather-app
         env:
           KUBECONFIG: ./kubeconfig.yaml

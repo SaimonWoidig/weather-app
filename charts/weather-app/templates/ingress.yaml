@@ -4,7 +4,8 @@ metadata:
   name: weather-app-ingress
 spec:
   rules:
-    - http:
+    - host: {{ .Values.host.url | quote }}
+      http:
         paths:
           - path: /api
             pathType: ImplementationSpecific
