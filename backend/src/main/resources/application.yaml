@@ -31,7 +31,7 @@ backend:
     fallback:
       # GPS of the Prague castle
       latitude: 50.0911
-      longitude: 14.3990416
+      longitude: 14.3991
   security:
     argon2:
       enabled: true
