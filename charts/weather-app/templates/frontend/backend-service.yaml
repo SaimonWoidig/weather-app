@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: weather-app-frontend
+spec:
+  selector:
+    app: weather-app-frontend
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: http
