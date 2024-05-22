@@ -69,7 +69,11 @@ const LocationsForm: Component<LocationsFormProps> = (props) => {
             class="w-full"
             type="number"
             name="latitude"
+            min={-90}
+            max={90}
+            step={0.0001}
             placeholder="Location latitude"
+            required
             onChange={(e) => setLatitude(Number(e.currentTarget.value))}
           />
         </label>
@@ -79,7 +83,11 @@ const LocationsForm: Component<LocationsFormProps> = (props) => {
             class="w-full"
             type="number"
             name="longitude"
+            min={-180}
+            max={180}
+            step={0.0001}
             placeholder="Location longitude"
+            required
             onChange={(e) => setLongitude(Number(e.currentTarget.value))}
           />
         </label>

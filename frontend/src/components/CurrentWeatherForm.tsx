@@ -1,7 +1,8 @@
 import { VsError } from "solid-icons/vs";
 import {
   ErrorBoundary,
-  Suspense,
+  Match,
+  Switch,
   createSignal,
   onMount,
   type Component,
@@ -21,6 +22,8 @@ const CurrentWeatherForm: Component = () => {
     WeatherCode.Unknown
   );
 
+  const [weatherLoading, setWeatherLoading] = createSignal(true);
+
   onMount(async () => {
     const fallbackCoordinate = await getFallbackCoordinate();
     setLatitude(fallbackCoordinate.latitude);
@@ -33,6 +36,8 @@ const CurrentWeatherForm: Component = () => {
     setTemperature(weather.temperature);
     setPrecipitation(weather.precipitation);
     setWeatherType(weather.weatherType);
+
+    setWeatherLoading(false);
   });
 
   return (
@@ -42,10 +47,15 @@ const CurrentWeatherForm: Component = () => {
         method="post"
         onSubmit={async (e) => {
           e.preventDefault();
+
+          setWeatherLoading(true);
+
           const weather = await getCurrentWeather(latitude()!, longitude()!);
           setTemperature(weather.temperature);
           setPrecipitation(weather.precipitation);
           setWeatherType(weather.weatherType);
+
+          setWeatherLoading(false);
         }}
       >
         <label class="input input-bordered flex items-center gap-2">
@@ -56,7 +66,9 @@ const CurrentWeatherForm: Component = () => {
             min={-90}
             max={90}
             step={0.0001}
+            placeholder="Location latitude"
             value={latitude()}
+            required
             onInput={(e) => setLatitude(Number(e.currentTarget.value))}
           />
         </label>
@@ -68,7 +80,9 @@ const CurrentWeatherForm: Component = () => {
             min={-180}
             max={180}
             step={0.0001}
+            placeholder="Location longitude"
             value={longitude()}
+            required
             onInput={(e) => setLongitude(Number(e.currentTarget.value))}
           />
         </label>
@@ -76,26 +90,26 @@ const CurrentWeatherForm: Component = () => {
           Show weather
         </button>
       </form>
-      <ErrorBoundary
-        fallback={(error) => (
-          <div class="alert alert-error shadow-lg w-max">
-            <VsError />
-            <span class="pl-2">
-              Failed to load weather: {error?.message || "Unexpected error"}
-            </span>
-          </div>
-        )}
-      >
-        <Suspense
-          fallback={<span class="loading loading-dots loading-lg"></span>}
-        >
-          <WeatherCard
-            temperature={temperature()}
-            precipitation={precipitation()}
-            weatherType={weatherType()}
-          />
-        </Suspense>
-      </ErrorBoundary>
+      <Switch fallback={<span class="loading loading-dots loading-lg"></span>}>
+        <Match when={!weatherLoading()}>
+          <ErrorBoundary
+            fallback={(error) => (
+              <div class="alert alert-error shadow-lg w-max">
+                <VsError />
+                <span class="pl-2">
+                  Failed to load weather: {error?.message || "Unexpected error"}
+                </span>
+              </div>
+            )}
+          >
+            <WeatherCard
+              temperature={temperature()}
+              precipitation={precipitation()}
+              weatherType={weatherType()}
+            />
+          </ErrorBoundary>
+        </Match>
+      </Switch>
     </div>
   );
 };
