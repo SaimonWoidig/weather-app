@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weather-app-backend
+spec:
+  selector:
+    matchLabels:
+      app: weather-app-backend
+  template:
+    metadata:
+      labels:
+        app: weather-app-backend
+    spec:
+      volumes:
+        - name: weather-app-backend-config
+          secret:
+            secretName: weather-app-backend-config
+      containers:
+        - name: weather-app-backend
+          image: "{{ .Values.backend.image.name }}:{{ .Values.backend.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: weather-app-backend-config
+              mountPath: /usr/local/weather-app/config
+              readOnly: true
+          ports:
+            - name: http
+              containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+          resources:
+          {{- toYaml .Values.backend.resources | nindent 12 }}

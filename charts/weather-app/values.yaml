@@ -1,0 +1,22 @@
+backend:
+  image:
+    name: "ghcr.io/saimonwoidig/weather-app/backend"
+    tag: "0.0.0-develop"
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+frontend:
+  image:
+    name: "ghcr.io/saimonwoidig/weather-app/frontend"
+    tag: "0.0.0-develop"
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "250m"
+    limits:
+      memory: "256Mi"
+      cpu: "500m"
