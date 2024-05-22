@@ -80,7 +80,7 @@ jobs:
       - name: install deps
         run: pnpm install --frozen-lockfile
       - name: set version
-        run: pnpm run version ${{github.event.release.tag_name}}
+        run: pnpm version ${{github.event.release.tag_name}}
       - name: build
         run: pnpm run build
       - name: upload output as artifact
