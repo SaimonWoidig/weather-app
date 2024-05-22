@@ -9,6 +9,9 @@ backend:
     limits:
       memory: "512Mi"
       cpu: "500m"
+  config:
+    jwt:
+      secret: "this-is-rewritten-from-a-ci-secret"
 frontend:
   image:
     name: "ghcr.io/saimonwoidig/weather-app/frontend"
