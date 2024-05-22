@@ -11,10 +11,17 @@ spec:
       labels:
         app: weather-app-backend
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       volumes:
         - name: weather-app-backend-config
           secret:
             secretName: weather-app-backend-config
+        - name: weather-app-backend-data
+          persistentVolumeClaim:
+            claimName: weather-app-backend-data
       containers:
         - name: weather-app-backend
           image: "{{ .Values.backend.image.name }}:{{ .Values.backend.image.tag }}"
@@ -23,6 +30,8 @@ spec:
             - name: weather-app-backend-config
               mountPath: /usr/local/weather-app/config
               readOnly: true
+            - name: weather-app-backend-data
+              mountPath: /usr/local/weather-app/data
           ports:
             - name: http
               containerPort: 8080
