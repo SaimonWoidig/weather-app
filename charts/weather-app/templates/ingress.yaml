@@ -21,3 +21,6 @@ spec:
                 name: weather-app-frontend
                 port:
                   name: http
+  tls:
+    - hosts:
+        - {{ .Values.host.url | quote }}
