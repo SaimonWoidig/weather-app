@@ -29,11 +29,11 @@ jobs:
         run: sh ./gradlew -x test bootJar
       - name: rename jar
         run: mv build/libs/*.jar build/libs/weather-app-backend.jar
-      - name: upload jar as artifact
+      - name: upload libs containing jar as artifact
         uses: actions/upload-artifact@v4
         with:
           name: backend
-          path: backend/build/libs/weather-app-backend.jar
+          path: backend/build/libs
           retention-days: 1
           if-no-files-found: error
   dockerize-backend:
@@ -44,11 +44,11 @@ jobs:
         working-directory: backend
     steps:
       - uses: actions/checkout@v4
-      - name: download jar
+      - name: download libs containing jar
         uses: actions/download-artifact@v4
         with:
           name: backend
-          path: backend/build/libs/weather-app-backend.jar
+          path: backend/build/libs
       - uses: docker/setup-buildx-action@v3
       - uses: docker/login-action@v3
         with:
