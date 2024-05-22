@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 @RestControllerAdvice
@@ -64,6 +65,12 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
     public ErrorDTO handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e, WebRequest request) {
         return new ErrorDTO(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(), e.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDTO handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e, WebRequest request) {
+        return new ErrorDTO(HttpStatus.BAD_REQUEST.value(), "Invalid parameter value for " + e.getParameter().getParameterName());
     }
 
     @ExceptionHandler(Exception.class)

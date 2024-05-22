@@ -5,11 +5,14 @@ import cz.woidig.backend.exceptions.InvalidPasswordException;
 import cz.woidig.backend.exceptions.UserAlreadyExistsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -108,6 +111,20 @@ class ControllerExceptionHandlerTest {
 
         ErrorDTO expected = new ErrorDTO(415, "Content-Type 'application/test123' is not supported");
         ErrorDTO actual = controllerExceptionHandler.handleHttpMediaTypeNotSupportedException(e, null);
+
+        assertEquals(expected.message(), actual.message());
+    }
+
+    @Test
+    void test_handleMethodArgumentTypeMismatchException() {
+        MethodParameter methodParameter = Mockito.mock(MethodParameter.class);
+        Mockito.when(methodParameter.getParameterName()).thenReturn("latitude");
+        MethodArgumentTypeMismatchException e = new MethodArgumentTypeMismatchException(
+                "invalid value", Float.class, "latitude", methodParameter, null
+        );
+
+        ErrorDTO expected = new ErrorDTO(400, "Invalid parameter value for latitude");
+        ErrorDTO actual = controllerExceptionHandler.handleMethodArgumentTypeMismatchException(e, null);
 
         assertEquals(expected.message(), actual.message());
     }
