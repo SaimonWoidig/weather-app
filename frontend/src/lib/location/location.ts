@@ -16,18 +16,27 @@ type LocationResponse = {
   longitude: number;
 };
 
-export async function getFallBackLocation(): Promise<Location> {
-  const apiUrl = new URL(`/geo/fallback`, serverEnv.BACKEND_API_URL);
+type FallbackLocationResponse = {
+  latitude: number;
+  longitude: number;
+};
 
+export type Coordinate = {
+  latitude: number;
+  longitude: number;
+};
+
+export async function getFallbackCoordinate(): Promise<Coordinate> {
+  const apiUrl = new URL(`/geo/fallback`, serverEnv.BACKEND_API_URL);
+  console.log("Fetching fallback location", apiUrl);
   try {
     const response = await fetch(apiUrl, {
       method: "GET",
     });
     if (response.ok) {
-      const data: LocationResponse = await response.json();
+      const data: FallbackLocationResponse = await response.json();
+      console.log("Got fallback location", data);
       return {
-        id: data.locationId,
-        name: data.name,
         latitude: data.latitude,
         longitude: data.longitude,
       };

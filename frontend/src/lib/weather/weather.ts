@@ -3,7 +3,7 @@
 import { serverEnv } from "../env/server/env";
 import WeatherCode from "./weather_code";
 
-type Forecast = {
+export type Forecast = {
   weatherType: WeatherCode;
   temperature: number;
   precipitation: number;
@@ -33,6 +33,7 @@ export const getCurrentWeather = async (
     `/weather/current?latitude=${latitude}&longitude=${longitude}`,
     serverEnv.BACKEND_API_URL
   );
+  console.log("fetching weather", apiUrl);
   try {
     const response = await fetch(apiUrl, {
       method: "GET",

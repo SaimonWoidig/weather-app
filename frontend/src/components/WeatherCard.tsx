@@ -14,23 +14,24 @@ type WeatherCardProps = {
 };
 
 const WeatherCard: Component<WeatherCardProps> = (props) => {
-  const { temperature, precipitation, weatherType } = props;
-  const weatherIcon = weatherCodeToIcon(weatherType);
+  const weatherIcon = () => weatherCodeToIcon(props.weatherType);
   return (
     <div class="card lg:card-side bg-neutral shadow-xl p-20 w-[48rem]">
-      <figure>{weatherIcon}</figure>
+      <figure>{weatherIcon()}</figure>
       <div class="card-body">
         {props.title && <h2 class="card-title">{props.title}</h2>}
         <ul>
-          <li class="font-bold">Temperature: {temperature} °C</li>
-          <li class="font-bold">Precipitation: {precipitation} mm</li>
+          <li class="font-bold">Temperature: {props.temperature || 0} °C</li>
+          <li class="font-bold">
+            Precipitation: {props.precipitation || 0} mm
+          </li>
           <li class="font-bold">Report:</li>
           {props.date && <li class="font-bold">Date: {props.date}</li>}
           <p>
             We can expect the weather to be{" "}
-            <strong>{weatherCodeToString(weatherType)}</strong> with the
-            temperature being <strong>{temperature} °C</strong> and the
-            precipitation being <strong>{precipitation} mm</strong>.
+            <strong>{weatherCodeToString(props.weatherType)}</strong> with the
+            temperature being <strong>{props.temperature} °C</strong> and the
+            precipitation being <strong>{props.precipitation} mm</strong>.
           </p>
         </ul>
       </div>
