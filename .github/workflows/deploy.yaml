@@ -126,4 +126,8 @@ jobs:
         working-directory: charts
     steps:
       - uses: actions/checkout@v4
-      - run: "TODO"
+      - uses: azure/setup-helm@v4.2.0
+      - name: Decode kubeconfig secret and save to file
+        run: "${{secrets.KUBECONFIG_B64}} | base64 -d > kubeconfig.yaml && chmod 600 kubeconfig.yaml"
+      - name: Deploy via helm
+        run: KUBECONFIG=kubeconfig.yaml helm upgrade -i -n weather-app --create-namespace --atomic weather-app ./weather-app
