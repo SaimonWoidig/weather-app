@@ -24,4 +24,4 @@ frontend:
       memory: "256Mi"
       cpu: "500m"
 host:
-  url: "http://somesite.example.com"
+  url: "somesite.example.com"
